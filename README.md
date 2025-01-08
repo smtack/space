@@ -1,6 +1,6 @@
 # Space
 
-<p align="center"><img src="public/screenshots/screenshot.png" width="900" alt="Screenshot"></a></p>
+<p align="center"><img src="public/images/screenshot.png" width="900" alt="Screenshot"></a></p>
 
 Space is a social microblogging application built with Laravel and Vue.js
 

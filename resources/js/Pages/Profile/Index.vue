@@ -11,20 +11,16 @@ defineProps(['profile', 'posts']);
     <Head title="Profile" />
 
     <AuthenticatedLayout>
-        <div class="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
-            <div class="mt-6 bg-white shadow-sm rounded-lg divide-y">
-                <User :user="profile" />
-            </div>
+        <div>
+            <User :user="profile" />
         </div>
 
-        <div class="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
-            <div class="mt-6 bg-white shadow-sm rounded-lg divide-y">
-                <Post
-                    v-for="post in posts"
-                    :key="post.id"
-                    :post="post"
-                />
-            </div>
+        <div class="mt-6 divide-y">
+            <Post
+                v-for="post in posts"
+                :key="post.id"
+                :post="post"
+            />
         </div>
     </AuthenticatedLayout>
 </template>

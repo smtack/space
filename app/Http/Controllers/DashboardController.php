@@ -12,7 +12,7 @@ class DashboardController extends Controller
     public function __invoke()
     {
         return Inertia::render('Dashboard', [
-            'posts' => Post::with('user:id,name,username,avatar')->latest()->get(),
+            'posts' => Post::latest()->get(),
         ]);
     }
 }

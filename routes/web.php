@@ -4,11 +4,14 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', WelcomeController::class)->middleware('guest');
 
 Route::get('/dashboard', DashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/search', SearchController::class)->middleware('auth')->name('search');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile/{user:username}', [ProfileController::class, 'index'])->name('profile.index');

@@ -17,10 +17,12 @@ const editing = ref(false);
 
 <template>
     <div class="p-6 flex space-x-2">
-        <img
-            class="h-12 w-12 rounded-full"
-            :src="`/storage/avatars/${post.user.avatar}`"
-            alt="Avatar">
+        <Link :href="route('profile.index', post.user.username)">
+            <img
+                class="h-12 w-12 rounded-full"
+                :src="`/storage/avatars/${post.user.avatar}`"
+                alt="Avatar">
+        </Link>
         <div class="flex-1">
             <div class="flex justify-between items-center">
                 <div>
@@ -57,7 +59,7 @@ const editing = ref(false);
                     <button class="mt-4" @click="editing = false; form.reset(); form.clearErrors()">Cancel</button>
                 </div>
             </form>
-            <p v-else class="mt-4 text-lg text-gray-900">{{ post.message }}</p>
+            <p v-else class="mt-4 text-md text-gray-900">{{ post.message }}</p>
         </div>
     </div>
 </template>

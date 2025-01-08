@@ -5,9 +5,13 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
+
+const form = useForm({
+    q: '',
+});
 </script>
 
 <template>
@@ -28,24 +32,6 @@ const showingNavigationDropdown = ref(false);
                                     />
                                 </Link>
                             </div>
-
-                            <!-- Navigation Links -->
-                            <div
-                                class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
-                            >
-                                <NavLink
-                                    :href="route('dashboard')"
-                                    :active="route().current('dashboard')"
-                                >
-                                    Dashboard
-                                </NavLink>
-                                <NavLink
-                                    :href="route('posts.index')"
-                                    :active="route().current('posts.index')"
-                                >
-                                    Posts
-                                </NavLink>
-                            </div>
                         </div>
 
                         <div class="hidden sm:ms-6 sm:flex sm:items-center">
@@ -56,7 +42,7 @@ const showingNavigationDropdown = ref(false);
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
+                                                class="inline-flex items-center rounded-md border border-transparent bg-white py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
                                             >
                                                 <img class="h-9 w-9 rounded-full" :src="`/storage/avatars/${ $page.props.auth.user.avatar }`" alt="Avatar">
                                             </button>
@@ -152,6 +138,18 @@ const showingNavigationDropdown = ref(false);
                         </ResponsiveNavLink>
                     </div>
 
+                    <div class="py-2">
+                        <div class="bg-white mx-auto p-2 rounded-lg">
+                            <form @submit.prevent="form.get(route('search'))">
+                                <input
+                                    type="text"
+                                    v-model="form.q"
+                                    placeholder="Search..."
+                                    class="block w-full h-10 text-sm border-gray-300 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md">
+                            </form>
+                        </div>
+                    </div>
+
                     <!-- Responsive Settings Options -->
                     <div
                         class="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600"
@@ -198,7 +196,47 @@ const showingNavigationDropdown = ref(false);
 
             <!-- Page Content -->
             <main>
-                <slot />
+                <div class="grid grid-cols-2 sm:grid-cols-12 gap-3 mx-auto max-w-7xl sm:px-6 lg:px-8 justify-items-stretch">
+                    <!-- Left menu -->
+                    <div class="hidden sm:block col-span-3 py-6 xs:hidden">
+                        <div class="bg-white mx-auto p-6 rounded-lg">
+                            <div>
+                                <NavLink
+                                    :href="route('dashboard')"
+                                    :active="route().current('dashboard')"
+                                >
+                                    Dashboard
+                                </NavLink>
+                                <NavLink
+                                    :href="route('posts.index')"
+                                    :active="route().current('posts.index')"
+                                >
+                                    Posts
+                                </NavLink>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Center column -->
+                    <div class="col-span-6 py-6">
+                        <div class="bg-white mx-auto rounded-lg">
+                            <slot />
+                        </div>
+                    </div>
+
+                    <!-- Right column -->
+                    <div class="hidden sm:block col-span-3 py-6">
+                        <div class="bg-white mx-auto p-6 rounded-lg">
+                            <form @submit.prevent="form.get(route('search'))">
+                                <input
+                                    type="text"
+                                    v-model="form.q"
+                                    placeholder="Search..."
+                                    class="block w-full h-10 text-sm border-gray-300 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md">
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </main>
         </div>
     </div>

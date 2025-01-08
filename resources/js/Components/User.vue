@@ -3,7 +3,7 @@ defineProps(['user']);
 </script>
 
 <template>
-    <div class="p-6 flex space-x-2">
+    <div class="border rounded-lg border-gray-300 p-6 flex space-x-2">
         <img
             class="h-12 w-12 text-gray-600 rounded-full"
             :src="`/storage/avatars/${user.avatar}`"
@@ -16,7 +16,7 @@ defineProps(['user']);
                     <small class="block mt-4 text-sm text-gray-600">Joined on {{ new Date(user.created_at).toDateString() }}</small>
                 </div>
             </div>
-            <p class="mt-4 text-md text-gray-800">{{ user.bio }}</p>
+            <p class="mt-4 text-sm text-gray-800">{{ user.bio }}</p>
         </div>
     </div>
 </template>

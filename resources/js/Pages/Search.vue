@@ -7,7 +7,7 @@ defineProps(['posts']);
 </script>
 
 <template>
-    <Head title="Posts" />
+    <Head title="Search" />
 
     <AuthenticatedLayout>
         <div class="divide-y">
