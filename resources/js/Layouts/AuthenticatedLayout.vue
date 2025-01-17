@@ -197,6 +197,13 @@ const form = useForm({
             <!-- Page Content -->
             <main>
                 <div class="grid grid-cols-2 sm:grid-cols-12 gap-3 mx-auto max-w-7xl sm:px-6 lg:px-8 justify-items-stretch">
+                    <!-- Flash message -->
+                    <div
+                        class="col-span-12 mt-6 bg-red-500 rounded-md relative p-6"
+                        v-if="$page.props.flash.message">
+                        <p class="text-white">{{  $page.props.flash.message }}</p>
+                    </div>
+
                     <!-- Left menu -->
                     <div class="hidden sm:block col-span-3 py-6 xs:hidden">
                         <div class="bg-white mx-auto p-6 rounded-lg">
@@ -218,7 +225,7 @@ const form = useForm({
                     </div>
 
                     <!-- Center column -->
-                    <div class="col-span-6 py-6">
+                    <div class="col-span-12 sm:col-span-6 py-6">
                         <div class="bg-white mx-auto rounded-lg">
                             <slot />
                         </div>

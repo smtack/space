@@ -3,9 +3,12 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Post from '@/Components/Post.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import SimplePagination from '@/Components/SimplePagination.vue';
 import { useForm, Head } from '@inertiajs/vue3';
 
-defineProps(['posts']);
+const props = defineProps({
+    posts: Object,
+});
 
 const form = useForm({
     message: '',
@@ -30,10 +33,12 @@ const form = useForm({
 
         <div class="mt-6 divide-y">
             <Post
-                v-for="post in posts"
+                v-for="post in posts.data"
                 :key="post.id"
                 :post="post"
             />
+
+            <SimplePagination :pagination="posts" />
         </div>
     </AuthenticatedLayout>
 </template>

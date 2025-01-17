@@ -20,7 +20,7 @@ class ProfileController extends Controller
     {
         return Inertia::render('Profile/Index', [
             'profile' => $user,
-            'posts' => Post::where('user_id', '=', $user->id)->latest()->get(),
+            'posts' => Post::where('user_id', '=', $user->id)->latest()->simplePaginate(10),
         ]);
     }
 

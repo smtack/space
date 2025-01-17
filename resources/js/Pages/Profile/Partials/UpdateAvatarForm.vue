@@ -11,6 +11,7 @@ const form = useForm({
 const submit = () => {
     form.post(route('profile.avatar'), {
         forceFormData: true,
+        preserveScroll: true,
     });
 };
 </script>

@@ -13,7 +13,7 @@ class SearchController extends Controller
         $query = $request->input('q');
 
         return Inertia::render('Search', [
-            'posts' => Post::where('message', 'like', '%' . $query . '%')->latest()->get(),
+            'posts' => Post::where('message', 'like', '%' . $query . '%')->latest()->simplePaginate(10)->withQueryString(),
         ]);
     }
 }

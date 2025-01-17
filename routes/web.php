@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
@@ -23,7 +24,11 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('posts', PostController::class)
-    ->only(['index', 'store', 'update', 'destroy'])
-    ->middleware(['auth', 'verified']);
+    ->only(['index', 'store', 'show', 'update', 'destroy'])
+    ->middleware('auth');
+
+Route::resource('replies', ReplyController::class)
+    ->only(['store', 'update', 'destroy'])
+    ->middleware('auth');
 
 require __DIR__.'/auth.php';
