@@ -5,33 +5,12 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import Reply from '@/Components/Reply.vue';
+import SimplePagination from '@/Components/SimplePagination.vue';
+import LikeIcon from '@/Components/Icons/LikeIcon.vue';
+import UnlikeIcon from '@/Components/Icons/UnlikeIcon.vue';
+import ReplyIcon from '@/Components/Icons/ReplyIcon.vue';
 import { Link, Head, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import updateLocale from 'dayjs/plugin/updateLocale';
-import SimplePagination from '@/Components/SimplePagination.vue';
-
-dayjs.extend(relativeTime);
-dayjs.extend(updateLocale);
-
-dayjs.updateLocale('en', {
-  relativeTime: {
-    future: "in %s",
-    past: "%s ago",
-    s: 'a few seconds',
-    m: "1 minute",
-    mm: "%d minutes",
-    h: "1 hour",
-    hh: "%d hours",
-    d: "1 day",
-    dd: "%d days",
-    M: "1 month",
-    MM: "%d months",
-    y: "1 year",
-    yy: "%d years"
-  }
-});
 
 const props = defineProps({
     post: Object,
@@ -55,7 +34,7 @@ const replyform = useForm({
 
     <AuthenticatedLayout>
         <div class="p-6 flex space-x-2">
-            <Link v-on:click.stop :href="route('profile.index', post.user.username)">
+            <Link :href="route('profile.index', post.user.username)">
                 <img
                     class="h-12 w-12 rounded-full"
                     :src="`/storage/avatars/${post.user.avatar}`"
@@ -64,14 +43,14 @@ const replyform = useForm({
             <div class="flex-1">
                 <div class="flex justify-between items-center">
                     <div>
-                        <Link v-on:click.stop :href="route('profile.index', post.user.username)">
-                            <span class="text-gray-800">{{ post.user.name }}</span>
-                            <span class="text-sm ml-2 text-gray-600">@{{ post.user.username }}</span>
+                        <Link :href="route('profile.index', post.user.username)">
+                            <span class="text-gray-800 hover:underline">{{ post.user.name }}</span>
+                            <span class="text-sm ml-2 text-gray-600 hover:underline">@{{ post.user.username }}</span>
                         </Link>
-                        <small class="ml-2 text-sm text-gray-400">&middot; {{ dayjs(post.created_at).fromNow(true) }}</small>
+                        <small class="ml-2 text-sm text-gray-400">&middot; {{ new Date(post.created_at).toDateString() }}</small>
                         <small v-if="post.created_at !== post.updated_at" class="text-sm text-gray-600"> &middot; edited</small>
                     </div>
-                    <Dropdown v-if="post.user_id === $page.props.auth.user.id" v-on:click.stop>
+                    <Dropdown v-if="post.user_id === $page.props.auth.user.id">
                         <template #trigger>
                             <button>
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
@@ -89,7 +68,7 @@ const replyform = useForm({
                         </template>
                     </Dropdown>
                 </div>
-                <form v-if="editing" v-on:click.stop @submit.prevent="form.put(route('posts.update', post.id), { onSuccess: () => editing = false })">
+                <form v-if="editing" @submit.prevent="form.put(route('posts.update', post.id), { onSuccess: () => editing = false })">
                     <textarea v-model="form.message" class="mt-4 w-full text-gray-900 border-gray-300 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md shadow-sm"></textarea>
                     <InputError :message="form.errors.message" class="mt-2" />
                     <div class="space-x-2">
@@ -98,6 +77,36 @@ const replyform = useForm({
                     </div>
                 </form>
                 <p v-else class="mt-4 text-md text-gray-900">{{ post.message }}</p>
+            </div>
+        </div>
+
+        <div class="px-6 py-3 border-y mt-4 flex gap-2">
+            <div class="mr-2 flex gap-1">
+                <Link
+                    as="button"
+                    v-if="post.liked"
+                    :href="route('posts.unlike', props.post.id)"
+                    method="post"
+                    class="hover:bg-red-200 rounded-full"
+                    preserve-scroll
+                    >
+                    <UnlikeIcon   />
+                </Link>
+                <Link
+                    as="button"
+                    v-else
+                    :href="route('posts.like', props.post.id)"
+                    method="post"
+                    class="hover:bg-red-200 rounded-full"
+                    preserve-scroll
+                >
+                    <LikeIcon />
+                </Link>
+                <p class="text-sm">{{ post.likes_count }}</p>
+            </div>
+            <div class="flex gap-1">
+                <ReplyIcon />
+                <p class="text-sm">{{ post.replies_count }}</p>
             </div>
         </div>
 

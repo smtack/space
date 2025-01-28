@@ -2,13 +2,6 @@
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import { Head, Link } from '@inertiajs/vue3';
 
-defineProps({
-    appName: {
-        type: String,
-        required: true,
-    },
-});
-
 function handleImageError() {
     document.getElementById('screenshot-container')?.classList.add('!hidden');
     document.getElementById('docs-card')?.classList.add('!row-span-1');
@@ -176,7 +169,7 @@ function handleImageError() {
                 </main>
 
                 <footer class="py-16 text-center text-sm text-black dark:text-white/70">
-                    &copy; {{ appName }} {{ new Date().getFullYear() }}
+                    &copy; {{ $page.props.appName }} {{ new Date().getFullYear() }}
                 </footer>
             </div>
         </div>

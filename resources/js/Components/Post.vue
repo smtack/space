@@ -3,6 +3,9 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import LikeIcon from '@/Components/Icons/LikeIcon.vue';
+import UnlikeIcon from '@/Components/Icons/UnlikeIcon.vue';
+import ReplyIcon from '@/Components/Icons/ReplyIcon.vue';
 import { Link, router, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import dayjs from 'dayjs';
@@ -30,7 +33,9 @@ dayjs.updateLocale('en', {
   }
 })
 
-const props = defineProps(['post']);
+const props = defineProps({
+    post: Object,
+});
 
 const form = useForm({
     message: props.post.message,
@@ -89,6 +94,36 @@ const redirect = () => {
                 </div>
             </form>
             <p v-else class="mt-4 text-md text-gray-900">{{ post.message }}</p>
+
+            <div class="mt-4 flex justify-items-start gap-2">
+                <div v-on:click.stop class="mr-2 flex gap-1">
+                    <Link
+                        as="button"
+                        v-if="post.liked"
+                        :href="route('posts.unlike', props.post.id)"
+                        method="post"
+                        class="hover:bg-red-200 rounded-full"
+                        preserve-scroll
+                        >
+                        <UnlikeIcon   />
+                    </Link>
+                    <Link
+                        as="button"
+                        v-else
+                        :href="route('posts.like', props.post.id)"
+                        method="post"
+                        class="hover:bg-red-200 rounded-full"
+                        preserve-scroll
+                    >
+                        <LikeIcon />
+                    </Link>
+                    <p class="text-sm">{{ post.likes_count }}</p>
+                </div>
+                <div class="flex gap-1">
+                    <ReplyIcon />
+                    <p class="text-sm">{{ post.replies_count }}</p>
+                </div>
+            </div>
         </div>
     </div>
 </template>

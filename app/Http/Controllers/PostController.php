@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\Reply;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -17,9 +18,13 @@ class PostController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Posts/Index', [
-            'posts' => Post::latest()->simplePaginate(10),
-        ]);
+        $posts = Post::latest()->simplePaginate(10);
+
+        foreach($posts as $i => $post) {
+            $posts[$i]->liked = Auth::user()->likesPost($post);
+        }
+
+        return Inertia::render('Posts/Index', compact('posts'));
     }
 
     /**
@@ -41,7 +46,7 @@ class PostController extends Controller
 
         $request->user()->posts()->create($validated);
 
-        return redirect(route('dashboard'));
+        return redirect(route('home'));
     }
 
     /**
@@ -49,9 +54,14 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        $post->liked = Auth::user()->likesPost($post);
+
         return Inertia::render('Posts/Show', [
             'post' => $post,
-            'replies' => Reply::where('post_id', '=', $post->id)->latest()->simplePaginate(10),
+            'replies' => Reply::query()
+                ->where('post_id', '=', $post->id)
+                ->latest()
+                ->simplePaginate(10),
         ]);
     }
 
@@ -88,6 +98,6 @@ class PostController extends Controller
 
         $post->delete();
 
-        return redirect(route('dashboard'));
+        return redirect(route('home'));
     }
 }

@@ -16,7 +16,7 @@ const form = useForm({
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <Head title="Home" />
 
     <AuthenticatedLayout>
         <div class="p-6">

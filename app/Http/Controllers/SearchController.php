@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Models\Post;
+use App\Models\User;
 
 class SearchController extends Controller
 {
@@ -12,8 +14,23 @@ class SearchController extends Controller
     {
         $query = $request->input('q');
 
-        return Inertia::render('Search', [
-            'posts' => Post::where('message', 'like', '%' . $query . '%')->latest()->simplePaginate(10)->withQueryString(),
-        ]);
+        $posts = Post::query()
+            ->where('message', 'like', '%' . $query . '%')
+            ->latest()
+            ->simplePaginate(10)
+            ->withQueryString();
+
+        foreach($posts as $i => $post) {
+            $posts[$i]->liked = Auth::user()->likesPost($post);
+        }
+
+        $users = User::query()
+            ->where('name', 'like', '%' . $query . '%')
+            ->orWhere('username', 'like', '%' . $query . '%')
+            ->latest()
+            ->simplePaginate(10)
+            ->withQueryString();
+
+        return Inertia::render('Search', compact('posts', 'users'));
     }
 }

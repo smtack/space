@@ -18,9 +18,22 @@ class ProfileController extends Controller
 {
     public function index(User $user)
     {
+        $posts = Post::where('user_id', '=', $user->id)->latest()->simplePaginate(10);
+
+        foreach($posts as $i => $post) {
+            $posts[$i]->liked = Auth::user()->likesPost($post);
+        }
+
+        $user->followers = $user->followers()->count();
+        $user->posts = $user->posts()->count();
+        $user->replies = $user->replies()->count();
+        $user->likes = $user->likes()->count();
+
+        Auth::user()->follows = Auth::user()->follows($user);
+
         return Inertia::render('Profile/Index', [
             'profile' => $user,
-            'posts' => Post::where('user_id', '=', $user->id)->latest()->simplePaginate(10),
+            'posts' => $posts,
         ]);
     }
 

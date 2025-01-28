@@ -11,6 +11,7 @@ defineProps({
             :href="pagination.prev_page_url ?? ''"
             class="flex items-center justify-center px-3 py-2 text-sm text-gray-600"
             :class="{ '!text-gray-300': !pagination.prev_page_url }"
+            preserve-state
         >
             Previous
         </Link>
@@ -18,6 +19,7 @@ defineProps({
             :href="pagination.next_page_url ?? ''"
             class="flex items-center justify-center px-3 py-2 text-sm text-gray-600"
             :class="{ '!text-gray-300': !pagination.next_page_url }"
+            preserve-state
         >
             Next
         </Link>

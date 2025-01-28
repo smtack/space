@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -31,12 +33,21 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
+            'appName' => env('APP_NAME'),
             'auth' => [
                 'user' => $request->user(),
             ],
             'flash' => [
                 'message' => fn () => $request->session()->get('message'),
             ],
+            'topUsers' => Cache::remember('topUsers', now()->addMinutes(10), function() {
+                return User::query()
+                    ->select('name', 'username', 'avatar')
+                    ->withCount('followers')
+                    ->orderBy('followers_count', 'DESC')
+                    ->limit(5)
+                    ->get();
+            }),
         ];
     }
 }
