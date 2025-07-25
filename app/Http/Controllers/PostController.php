@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\File;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -42,9 +43,19 @@ class PostController extends Controller
     {
         $validated = $request->validate([
             'message' => 'required|string|max:300',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:4096',
         ]);
 
-        $request->user()->posts()->create($validated);
+        if($request->image) {
+            $request->file('image')->store('images', 'public');
+        }
+
+        $filename = ($request->image) ? $request->image->hashName() : null;
+
+        $request->user()->posts()->create([
+            'message' => $validated['message'],
+            'image' => $filename,
+        ]);
 
         return redirect(route('home'));
     }
@@ -95,6 +106,14 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         Gate::authorize('delete', $post);
+
+        if($post->image) {
+            $path = 'storage/images/' . $post->image;
+
+            if(File::exists($path)) {
+                File::delete($path);
+            }
+        }
 
         $post->delete();
 

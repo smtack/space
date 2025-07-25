@@ -86,7 +86,10 @@ const redirect = () => {
                 </Dropdown>
             </div>
             <form v-if="editing" v-on:click.stop @submit.prevent="form.put(route('posts.update', post.id), { onSuccess: () => editing = false })">
-                <textarea v-model="form.message" class="mt-4 w-full text-gray-900 border-gray-300 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md shadow-sm"></textarea>
+                <textarea
+                    v-model="form.message"
+                    class="mt-4 w-full p-2 bg-white text-gray-900 border-1 border-gray-300 focus:border-red-300 focus:outline-none focus:ring-3 focus:ring-red-200/50 rounded-md shadow-xs"
+                ></textarea>
                 <InputError :message="form.errors.message" class="mt-2" />
                 <div class="space-x-2">
                     <PrimaryButton class="mt-4">Save</PrimaryButton>
@@ -94,6 +97,13 @@ const redirect = () => {
                 </div>
             </form>
             <p v-else class="mt-4 text-md text-gray-900">{{ post.message }}</p>
+
+            <img
+                v-if="post.image"
+                :src="`/storage/images/${post.image}`"
+                alt="Post Image"
+                class="my-4 rounded-md"
+            >
 
             <div class="mt-4 flex justify-items-start gap-2">
                 <div v-on:click.stop class="mr-2 flex gap-1">
