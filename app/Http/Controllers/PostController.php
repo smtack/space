@@ -23,6 +23,8 @@ class PostController extends Controller
 
         foreach($posts as $i => $post) {
             $posts[$i]->liked = Auth::user()->likesPost($post);
+            $posts[$i]->bookmarked = Auth::user()->hasBookmarked($post);
+            $posts[$i]->reposted = Auth::user()->hasReposted($post);
         }
 
         return Inertia::render('Posts/Index', compact('posts'));
@@ -42,7 +44,7 @@ class PostController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'message' => 'required|string|max:300',
+            'message' => 'required|string|max:500',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:4096',
         ]);
 
@@ -66,6 +68,8 @@ class PostController extends Controller
     public function show(Post $post)
     {
         $post->liked = Auth::user()->likesPost($post);
+        $post->bookmarked = Auth::user()->hasBookmarked($post);
+        $post->reposted = Auth::user()->hasReposted($post);
 
         return Inertia::render('Posts/Show', [
             'post' => $post,
@@ -92,7 +96,7 @@ class PostController extends Controller
         Gate::authorize('update', $post);
 
         $validated = $request->validate([
-            'message' => 'required|string|max:300',
+            'message' => 'required|string|max:500',
         ]);
 
         $post->update($validated);

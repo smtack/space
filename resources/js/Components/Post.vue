@@ -1,11 +1,12 @@
 <script setup>
+import BookmarkIcon from './Icons/BookmarkIcon.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import LikeIcon from '@/Components/Icons/LikeIcon.vue';
-import UnlikeIcon from '@/Components/Icons/UnlikeIcon.vue';
 import ReplyIcon from '@/Components/Icons/ReplyIcon.vue';
+import RepostIcon from './Icons/RepostIcon.vue';
 import { Link, router, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import dayjs from 'dayjs';
@@ -105,33 +106,53 @@ const redirect = () => {
                 class="my-4 rounded-md"
             >
 
-            <div class="mt-4 flex justify-items-start gap-2">
-                <div v-on:click.stop class="mr-2 flex gap-1">
-                    <Link
-                        as="button"
-                        v-if="post.liked"
-                        :href="route('posts.unlike', props.post.id)"
-                        method="post"
-                        class="hover:bg-red-200 rounded-full"
-                        preserve-scroll
+            <div class="mt-8">
+                <div v-on:click.stop class="flex justify-between text-gray-500">
+                    <div class="flex items-center gap-2">
+                        <Link
+                            as="button"
+                            :href="post.liked ? route('posts.unlike', props.post.id) : route('posts.like', props.post.id)"
+                            method="post"
+                            class="hover:bg-red-200 rounded-full"
+                            preserve-scroll
                         >
-                        <UnlikeIcon   />
-                    </Link>
-                    <Link
-                        as="button"
-                        v-else
-                        :href="route('posts.like', props.post.id)"
-                        method="post"
-                        class="hover:bg-red-200 rounded-full"
-                        preserve-scroll
-                    >
-                        <LikeIcon />
-                    </Link>
-                    <p class="text-sm">{{ post.likes_count }}</p>
-                </div>
-                <div class="flex gap-1">
-                    <ReplyIcon />
-                    <p class="text-sm">{{ post.replies_count }}</p>
+                            <LikeIcon width="18" height="18" :fill="post.liked ? '#FF2D30' : '#818181'" />
+                        </Link>
+                        <span class="text-sm">{{ post.likes_count }}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <ReplyIcon @click="redirect" width="18" height="18" fill="#818181" class="hover:cursor-pointer hover:bg-red-200 rounded-full" />
+                        <span class="text-sm">{{ post.replies_count }}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <Link
+                            as="button"
+                            :href="post.bookmarked ? route('posts.removeBookmark', props.post.id) : route('posts.bookmark', props.post.id)"
+                            method="post"
+                            class="hover:bg-red-200 rounded-full"
+                            preserve-scroll
+                        >
+                            <BookmarkIcon
+                                height="18"
+                                width="18"
+                                :fill="post.bookmarked ? '#FF2D30' : 'none'"
+                                :stroke="post.bookmarked ? '#FF2D30' : '#818181'"
+                            />
+                        </Link>
+                        <span>{{ post.bookmarks_count }}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <Link
+                            as="button"
+                            :href="post.reposted ? route('posts.removeRepost', props.post.id) : route('posts.repost', props.post.id)"
+                            method="post"
+                            class="hover:bg-red-200 rounded-full"
+                            preserve-scroll
+                        >
+                            <RepostIcon height="18" width="18" :color="post.reposted ? '#FF2D20' : '#818181'" />
+                        </Link>
+                        <span>{{ post.reposts_count }}</span>
+                    </div>
                 </div>
             </div>
         </div>

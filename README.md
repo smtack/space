@@ -12,7 +12,7 @@ Space is a social microblogging application built with Laravel and Vue.js
 4. Run `cp .env.example .env` and configure for your database/server
 5. Run `php artisan key:generate` to generate APP_KEY
 7. Run `php artisan migrate`
-6. Run `npm run build` to build assets or `npm run dev` to run the vite dev server
+6. Run `composer run dev` to start the development server
 
 To enable profile pictures and post images, create `avatars` and `images` folders in `storage/app/public`, then copy `default.webp` from `public/images` into `avatars` folder, and then run `php artisan storage:link`
 

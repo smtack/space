@@ -139,6 +139,18 @@ const topUsers = usePage().props.topUsers;
                         >
                             Posts
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('posts.likes')"
+                            :active="route().current('posts.likes')"
+                        >
+                            Likes
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('posts.bookmarks')"
+                            :active="route().current('posts.bookmarks')"
+                        >
+                            Bookmarks
+                        </ResponsiveNavLink>
                     </div>
 
                     <div class="py-2">
@@ -223,11 +235,23 @@ const topUsers = usePage().props.topUsers;
                                 >
                                     Posts
                                 </NavLink>
+                                <NavLink
+                                    :href="route('posts.likes')"
+                                    :active="route().current('posts.likes')"
+                                >
+                                    Likes
+                                </NavLink>
+                                <NavLink
+                                    :href="route('posts.bookmarks')"
+                                    :active="route().current('posts.bookmarks')"
+                                >
+                                    Bookmarks
+                                </NavLink>
                             </div>
                         </div>
                         <div class="bg-white mx-auto mt-3 p-4 rounded-lg">
                             <div>
-                                <p class="text-gray-800 text-sm">&copy; {{ $page.props.appName + ' ' + new Date().getFullYear() }}</p>
+                                <p class="text-gray-500 text-sm">&copy; {{ $page.props.appName + ' ' + new Date().getFullYear() }}</p>
                             </div>
                         </div>
                     </div>

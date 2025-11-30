@@ -28,31 +28,49 @@ const unfollow = () => {
     <Head :title="`${profile.name}'s Profile`" />
 
     <AuthenticatedLayout>
-        <div class="border-b border-gray-300 p-6 flex space-x-2">
-            <img
-                class="h-12 w-12 text-gray-600 rounded-full"
-                :src="`/storage/avatars/${profile.avatar}`"
-                alt="Avatar">
-            <div class="flex-1">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <span class="block text-gray-800">{{ profile.name }}</span>
-                        <span class="block text-sm text-gray-400">@{{ profile.username }}</span>
-                        <small class="block mt-4 text-sm text-gray-600">Joined on {{ new Date(profile.created_at).toDateString() }}</small>
-                    </div>
+        <div class="flex flex-col sm:flex-row gap-6 sm:gap-8 p-6 items-start border-b border-gray-300">
+            <div class="shrink-0">
+                <img
+                    class="h-12 w-12 text-gray-600 rounded-full"
+                    :src="`/storage/avatars/${profile.avatar}`"
+                    alt="Avatar"
+                />
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="space-y-1">
+                    <h1 class="block text-gray-800 truncate">{{ profile.name }}</h1>
+                    <h2 class="block text-sm text-gray-400">@{{ profile.username }}</h2>
+                    <h3 class="block mt-4 text-sm text-gray-600">Joined on {{ new Date(profile.created_at).toDateString() }}</h3>
                 </div>
-                <p class="my-4 text-sm text-gray-800">{{ profile.bio }}</p>
+
+                <p class="my-4 text-sm text-gray-800 leading-relaxed">
+                    {{ profile.bio }}
+                </p>
 
                 <div v-if="profile.id !== $page.props.auth.user.id">
                     <SecondaryButton v-if="$page.props.auth.user.follows" @click="unfollow">Unfollow</SecondaryButton>
                     <PrimaryButton v-else @click="follow">Follow</PrimaryButton>
                 </div>
 
-                <div class="mt-8 flex justify-items-start gap-1">
-                    <UserIcon />{{ profile.followers }}
-                    <SpaceIcon class="ml-2" />{{ profile.posts }}
-                    <ReplyIcon class="ml-2" />{{ profile.replies }}
-                    <LikeIcon class="ml-2" />{{ profile.likes }}
+                <div class="mt-8">
+                    <div class="flex justify-between">
+                        <div class="flex items-center gap-2">
+                            <UserIcon />
+                            <span>{{ profile.followers }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <SpaceIcon />
+                            <span>{{ profile.posts }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <ReplyIcon />
+                            <span>{{ profile.replies }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <LikeIcon />
+                            <span>{{ profile.likes }}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

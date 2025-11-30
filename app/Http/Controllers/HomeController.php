@@ -18,6 +18,8 @@ class HomeController extends Controller
 
         foreach($posts as $i => $post) {
             $posts[$i]->liked = Auth::user()->likesPost($post);
+            $posts[$i]->bookmarked = Auth::user()->hasBookmarked($post);
+            $posts[$i]->reposted = Auth::user()->hasReposted($post);
         }
 
         return Inertia::render('Home', compact('posts'));

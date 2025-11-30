@@ -1,0 +1,76 @@
+<script setup>
+const props = defineProps({
+    width: {
+        type: [String, Number],
+        default: 24,
+    },
+    height: {
+        type: [String, Number],
+        default: 24,
+    },
+    color: {
+        type: String,
+        default: '#000000',
+    }
+})
+</script>
+
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<template>
+    <svg
+        fill="#000000"
+        :height="props.height"
+        :width="props.width"
+        viewBox="0 0 24 24"
+        id="repost-2"
+        xmlns="http://www.w3.org/2000/svg"
+        class="icon line">
+            <polyline
+                id="primary"
+                points="8 12 6 14 4 12"
+                :style="{
+                    fill: 'none',
+                    stroke: props.color,
+                    strokeLinecap: 'round',
+                    strokeLinejoin: 'round',
+                    strokeWidth: '1.5',
+                }"
+            ></polyline>
+            <path
+                id="primary-2"
+                data-name="primary"
+                d="M18,6V4a1,1,0,0,0-1-1H7A1,1,0,0,0,6,4V14"
+                :style="{
+                    fill: 'none',
+                    stroke: props.color,
+                    strokeLinecap: 'round',
+                    strokeLinejoin: 'round',
+                    strokeWidth: '1.5',
+                }"
+            ></path>
+            <polyline
+                id="primary-3"
+                data-name="primary"
+                points="16 12 18 10 20 12"
+                :style="{
+                    fill: 'none',
+                    stroke: props.color,
+                    strokeLinecap: 'round',
+                    strokeLinejoin: 'round',
+                    strokeWidth: '1.5',
+                }"
+            ></polyline>
+            <path
+                id="primary-4"
+                data-name="primary"
+                d="M6,18v2a1,1,0,0,0,1,1H17a1,1,0,0,0,1-1V10"
+                :style="{
+                    fill: 'none',
+                    stroke: props.color,
+                    strokeLinecap: 'round',
+                    strokeLinejoin: 'round',
+                    strokeWidth: '1.5',
+                }"
+            ></path>
+        </svg>
+</template>

@@ -18,10 +18,16 @@ class ProfileController extends Controller
 {
     public function index(User $user)
     {
-        $posts = Post::where('user_id', '=', $user->id)->latest()->simplePaginate(10);
+        $posts = Post::query()
+            ->whereIn('id', $user->reposts()->pluck('id'))
+            ->orWhere('user_id', '=', $user->id)
+            ->latest()
+            ->simplePaginate(10);
 
         foreach($posts as $i => $post) {
             $posts[$i]->liked = Auth::user()->likesPost($post);
+            $posts[$i]->bookmarked = Auth::user()->hasBookmarked($post);
+            $posts[$i]->reposted = Auth::user()->hasReposted($post);
         }
 
         $user->followers = $user->followers()->count();

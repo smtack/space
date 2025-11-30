@@ -6,14 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-use Inertia\Response;
 
-class LikeController extends Controller
+class BookmarkController extends Controller
 {
     public function index()
     {
         $posts = Post::query()
-            ->whereIn('id', Auth::user()->likes()->pluck('id'))
+            ->whereIn('id', Auth::user()->bookmarks()->pluck('id'))
             ->latest()
             ->simplePaginate(10);
 
@@ -23,23 +22,23 @@ class LikeController extends Controller
             $posts[$i]->reposted = Auth::user()->hasReposted($post);
         }
 
-        return Inertia::render('Posts/Likes', compact('posts'));
+        return Inertia::render('Posts/Bookmarks', compact('posts'));
     }
 
-    public function like(Post $post)
+    public function bookmark(Post $post)
     {
         $user = Auth::user();
 
-        $user->likes()->attach($post);
+        $user->bookmarks()->attach($post);
 
         return redirect()->back();
     }
 
-    public function unlike(Post $post)
+    public function removeBookmark(Post $post)
     {
         $user = Auth::user();
 
-        $user->likes()->detach($post);
+        $user->bookmarks()->detach($post);
 
         return redirect()->back();
     }

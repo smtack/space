@@ -15,6 +15,8 @@ class Post extends Model
 
     protected $withCount = [
         'likes',
+        'bookmarks',
+        'reposts',
         'replies',
     ];
 
@@ -36,5 +38,15 @@ class Post extends Model
     public function likes(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'post_like')->withTimestamps();
+    }
+
+    public function bookmarks(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'post_bookmark')->withTimestamps();
+    }
+
+    public function reposts(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'post_repost')->withTimestamps();
     }
 }

@@ -85,4 +85,24 @@ class User extends Authenticatable
     {
         return $this->likes()->where('post_id', $post->id)->exists();
     }
+
+    public function bookmarks(): BelongsToMany
+    {
+        return $this->belongsToMany(Post::class, 'post_bookmark')->withTimestamps();
+    }
+
+    public function hasBookmarked(Post $post)
+    {
+        return $this->bookmarks()->where('post_id', $post->id)->exists();
+    }
+
+    public function reposts(): BelongsToMany
+    {
+        return $this->belongsToMany(Post::class, 'post_repost')->withTimestamps();
+    }
+
+    public function hasReposted(Post $post)
+    {
+        return $this->reposts()->where('post_id', $post->id)->exists();
+    }
 }
