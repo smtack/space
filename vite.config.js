@@ -19,10 +19,4 @@ export default defineConfig({
             },
         }),
     ]
-    /* For Laragon: */
-    /* server: {
-        cors: {
-            origin: /^https?:\/\/(?:(?:[^:]+\.)?localhost|space\.test|127\.0\.0\.1|\[::1\])(?::\d+)?$/,
-        },
-    },*/
 });

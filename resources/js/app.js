@@ -21,6 +21,11 @@ createInertiaApp({
             .use(ZiggyVue)
             .mount(el);
     },
+    defaults: {
+        future: {
+            useScriptElementForInitialPage: true,
+        },
+    },
     progress: {
         color: '#FF2D30',
     },

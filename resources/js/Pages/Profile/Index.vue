@@ -3,8 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Post from '@/Components/Post.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import SimplePagination from '@/Components/SimplePagination.vue';
-import { Head, router } from '@inertiajs/vue3';
+import { InfiniteScroll, Head, router } from '@inertiajs/vue3';
 import UserIcon from '@/Components/Icons/UserIcon.vue';
 import ReplyIcon from '@/Components/Icons/ReplyIcon.vue';
 import LikeIcon from '@/Components/Icons/LikeIcon.vue';
@@ -28,7 +27,7 @@ const unfollow = () => {
     <Head :title="`${profile.name}'s Profile`" />
 
     <AuthenticatedLayout>
-        <div class="flex flex-col sm:flex-row gap-6 sm:gap-8 p-6 items-start border-b border-gray-300">
+        <div class="flex flex-col sm:flex-row gap-6 sm:gap-8 p-6 items-start">
             <div class="shrink-0">
                 <img
                     class="h-12 w-12 text-gray-600 rounded-full"
@@ -56,33 +55,33 @@ const unfollow = () => {
                     <div class="flex justify-between">
                         <div class="flex items-center gap-2">
                             <UserIcon />
-                            <span>{{ profile.followers }}</span>
+                            <span>{{ profile.followers_count }}</span>
                         </div>
                         <div class="flex items-center gap-2">
                             <SpaceIcon />
-                            <span>{{ profile.posts }}</span>
+                            <span>{{ profile.posts_count }}</span>
                         </div>
                         <div class="flex items-center gap-2">
                             <ReplyIcon />
-                            <span>{{ profile.replies }}</span>
+                            <span>{{ profile.replies_count }}</span>
                         </div>
                         <div class="flex items-center gap-2">
                             <LikeIcon />
-                            <span>{{ profile.likes }}</span>
+                            <span>{{ profile.likes_count }}</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="divide-y">
-            <Post
-                v-for="post in posts.data"
-                :key="post.id"
-                :post="post"
-            />
-
-            <SimplePagination :pagination="posts" />
+        <div>
+            <InfiniteScroll data="posts">
+                <Post
+                    v-for="post in posts.data"
+                    :key="post.id"
+                    :post="post"
+                />
+            </InfiniteScroll>
         </div>
     </AuthenticatedLayout>
 </template>

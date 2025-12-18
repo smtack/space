@@ -10,17 +10,20 @@ class HomeController extends Controller
 {
     public function __invoke()
     {
-        $posts = Post::query()
-            ->whereIn('user_id', Auth::user()->following()->pluck('user_id'))
-            ->orWhere('user_id', Auth::user()->id)
-            ->latest()
-            ->simplePaginate(10);
-
-        foreach($posts as $i => $post) {
-            $posts[$i]->liked = Auth::user()->likesPost($post);
-            $posts[$i]->bookmarked = Auth::user()->hasBookmarked($post);
-            $posts[$i]->reposted = Auth::user()->hasReposted($post);
-        }
+        $posts = Inertia::scroll(function () {
+            return Post::query()
+                ->whereIn('user_id', Auth::user()->following()->pluck('user_id'))
+                ->orWhere('user_id', Auth::user()->id)
+                ->latest()
+                ->paginate(10)
+                ->through(function ($post) {
+                    $post->liked = Auth::user()->likesPost($post);
+                    $post->bookmarked = Auth::user()->hasBookmarked($post);
+                    $post->reposted = Auth::user()->hasReposted($post);
+                    
+                    return $post;
+                });
+        })->matchOn('id');
 
         return Inertia::render('Home', compact('posts'));
     }

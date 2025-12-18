@@ -3,7 +3,7 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import { Link, useForm } from '@inertiajs/vue3';
+import { Link, useForm, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -37,6 +37,30 @@ const form = useForm({
 });
 
 const editing = ref(false);
+
+const cancel = () => {
+    editing.value = false;
+    form.reset();
+    form.clearErrors()
+}
+
+const save = () => {
+    form.put(route('replies.update', props.post.id), {
+        preserveState: false,
+        reset: ['replies'],
+        onSuccess: () => {
+            editing.value = false;
+            form.reset();
+        }
+    });
+}
+
+const destroy = (id) => {
+    router.delete(route('replies.destroy', id), {
+        preserveScroll: true,
+        reset: ['replies'],
+    });
+};
 </script>
 
 <template>
@@ -69,21 +93,21 @@ const editing = ref(false);
                         <button class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 transition duration-150 ease-in-out" @click="editing = true">
                             Edit
                         </button>
-                        <DropdownLink as="button" :href="route('replies.destroy', post.id)" method="delete">
+                        <DropdownLink as="button" @click="destroy(post.id)">
                             Delete
                         </DropdownLink>
                     </template>
                 </Dropdown>
             </div>
-            <form v-if="editing" @submit.prevent="form.put(route('replies.update', post.id), { onSuccess: () => editing = false })">
+            <form v-if="editing" @submit.prevent="save">
                 <textarea
                     v-model="form.message"
-                    class="mt-4 w-full p-2 text-gray-900 border-1 border-gray-300 focus:border-red-300 focus:outline-none focus:ring-3 focus:ring-red-200/50 rounded-md shadow-xs"
+                    class="mt-4 w-full p-2 text-gray-900 border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs"
                 ></textarea>
                 <InputError :message="form.errors.message" class="mt-2" />
                 <div class="space-x-2">
                     <PrimaryButton class="mt-4">Save</PrimaryButton>
-                    <button class="mt-4" @click="editing = false; form.reset(); form.clearErrors()">Cancel</button>
+                    <button class="mt-4" @click="cancel">Cancel</button>
                 </div>
             </form>
             <p v-else class="mt-4 text-md text-gray-900">{{ post.message }}</p>

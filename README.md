@@ -6,7 +6,7 @@ Space is a social microblogging application built with Laravel and Vue.js
 
 ## Installation
 
-1. Run `git clone https://github.com/smtack/space.git`
+1. Run `git clone https://github.com/smtack/space.git && cd space`
 2. Run `composer install`
 3. Run `npm install`
 4. Run `cp .env.example .env` and configure for your database/server

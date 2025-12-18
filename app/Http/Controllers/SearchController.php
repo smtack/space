@@ -14,24 +14,29 @@ class SearchController extends Controller
     {
         $query = $request->input('q');
 
-        $posts = Post::query()
-            ->where('message', 'like', '%' . $query . '%')
-            ->latest()
-            ->simplePaginate(10)
-            ->withQueryString();
+        $posts = Inertia::scroll(function () use ($query) {
+            return Post::query()
+                ->where('message', 'like', '%' . $query . '%')
+                ->latest()
+                ->paginate(10)
+                ->withQueryString()
+                ->through(function ($post) {
+                    $post->liked = Auth::user()->likesPost($post);
+                    $post->bookmarked = Auth::user()->hasBookmarked($post);
+                    $post->reposted = Auth::user()->hasReposted($post);
 
-        foreach($posts as $i => $post) {
-            $posts[$i]->liked = Auth::user()->likesPost($post);
-            $posts[$i]->bookmarked = Auth::user()->hasBookmarked($post);
-            $posts[$i]->reposted = Auth::user()->hasReposted($post);
-        }
+                    return $post;
+                });
+        })->matchOn('id');
 
-        $users = User::query()
-            ->where('name', 'like', '%' . $query . '%')
-            ->orWhere('username', 'like', '%' . $query . '%')
-            ->latest()
-            ->simplePaginate(10)
-            ->withQueryString();
+        $users = Inertia::scroll(fn () =>
+            User::query()
+                ->where('name', 'like', '%' . $query . '%')
+                ->orWhere('username', 'like', '%' . $query . '%')
+                ->latest()
+                ->paginate(10)
+                ->withQueryString()
+        );
 
         return Inertia::render('Search', compact('posts', 'users'));
     }

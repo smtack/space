@@ -18,22 +18,22 @@ class ProfileController extends Controller
 {
     public function index(User $user)
     {
-        $posts = Post::query()
-            ->whereIn('id', $user->reposts()->pluck('id'))
-            ->orWhere('user_id', '=', $user->id)
-            ->latest()
-            ->simplePaginate(10);
+        $posts = Inertia::scroll(function () use ($user) {
+            return Post::query()
+                ->whereIn('id', $user->reposts()->pluck('id'))
+                ->orWhere('user_id', '=', $user->id)
+                ->latest()
+                ->paginate(10)
+                ->through(function ($post) {
+                    $post->liked = Auth::user()->likesPost($post);
+                    $post->bookmarked = Auth::user()->hasBookmarked($post);
+                    $post->reposted = Auth::user()->hasReposted($post);
 
-        foreach($posts as $i => $post) {
-            $posts[$i]->liked = Auth::user()->likesPost($post);
-            $posts[$i]->bookmarked = Auth::user()->hasBookmarked($post);
-            $posts[$i]->reposted = Auth::user()->hasReposted($post);
-        }
+                    return $post;
+                });
+        })->matchOn('id');
 
-        $user->followers = $user->followers()->count();
-        $user->posts = $user->posts()->count();
-        $user->replies = $user->replies()->count();
-        $user->likes = $user->likes()->count();
+        $user->loadCount(['followers', 'posts', 'replies', 'likes']);
 
         Auth::user()->follows = Auth::user()->follows($user);
 

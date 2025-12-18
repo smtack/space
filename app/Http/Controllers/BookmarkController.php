@@ -11,16 +11,19 @@ class BookmarkController extends Controller
 {
     public function index()
     {
-        $posts = Post::query()
-            ->whereIn('id', Auth::user()->bookmarks()->pluck('id'))
-            ->latest()
-            ->simplePaginate(10);
+        $posts = Inertia::scroll(function () {
+            return Post::query()
+                ->whereIn('id', Auth::user()->bookmarks()->pluck('id'))
+                ->latest()
+                ->paginate(10)
+                ->through(function ($post) {
+                    $post->liked = Auth::user()->likesPost($post);
+                    $post->bookmarked = Auth::user()->hasBookmarked($post);
+                    $post->reposted = Auth::user()->hasReposted($post);
 
-        foreach($posts as $i => $post) {
-            $posts[$i]->liked = Auth::user()->likesPost($post);
-            $posts[$i]->bookmarked = Auth::user()->hasBookmarked($post);
-            $posts[$i]->reposted = Auth::user()->hasReposted($post);
-        }
+                    return $post;
+                });
+        })->matchOn('id');
 
         return Inertia::render('Posts/Bookmarks', compact('posts'));
     }

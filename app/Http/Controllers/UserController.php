@@ -12,12 +12,14 @@ class UserController extends Controller
     public function index()
     {
         return Inertia::render('Users/Index', [
-            'users' => User::query()
-                ->select('name', 'username', 'avatar', 'bio')
-                ->withCount('followers')
-                ->orderBy('followers_count', 'DESC')
-                ->latest()
-                ->simplePaginate(10),
+            'users' => Inertia::scroll(fn () =>
+                User::query()
+                    ->select('name', 'username', 'avatar', 'bio')
+                    ->withCount('followers')
+                    ->orderBy('followers_count', 'DESC')
+                    ->latest()
+                    ->paginate(10)
+            )
         ]);
     }
 

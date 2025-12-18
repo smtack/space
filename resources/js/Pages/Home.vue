@@ -3,8 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Post from '@/Components/Post.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SimplePagination from '@/Components/SimplePagination.vue';
-import { useForm, Head } from '@inertiajs/vue3';
+import { InfiniteScroll, useForm, Head } from '@inertiajs/vue3';
 
 const props = defineProps({
     posts: Object,
@@ -14,6 +13,16 @@ const form = useForm({
     message: '',
     image: null,
 });
+
+const post = () => {
+    form.post(route('posts.store'), {
+        preserveScroll: true,
+        reset: ['posts'],
+        onSuccess: () => {
+            form.reset();
+        },
+    });
+}
 </script>
 
 <template>
@@ -21,15 +30,12 @@ const form = useForm({
 
     <AuthenticatedLayout>
         <div class="p-6">
-            <form
-                @submit.prevent="form.post(route('posts.store'), { onSuccess: () => form.reset() })"
-                class="w-full"
-            >
+            <form @submit.prevent="post" class="w-full">
                 <div>
                     <textarea
                         v-model="form.message"
                         placeholder="What's on your mind?"
-                        class="w-full h-32 p-2 resize-none border-1 border-gray-300 focus:border-red-300 focus:outline-none focus:ring-3 focus:ring-red-200/50 rounded-md shadow-xs"
+                        class="w-full h-54 p-2 resize-none border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs"
                     ></textarea>
 
                     <InputError :message="form.errors.message" class="mt-2" />
@@ -51,14 +57,14 @@ const form = useForm({
             </form>
         </div>
 
-        <div class="mt-6 divide-y">
-            <Post
-                v-for="post in posts.data"
-                :key="post.id"
-                :post="post"
-            />
-
-            <SimplePagination :pagination="posts" />
+        <div class="mt-6">
+            <InfiniteScroll data="posts">
+                <Post
+                    v-for="post in posts.data"
+                    :key="post.id"
+                    :post="post"
+                />
+            </InfiniteScroll>
         </div>
     </AuthenticatedLayout>
 </template>

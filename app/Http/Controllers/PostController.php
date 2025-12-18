@@ -19,13 +19,18 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest()->simplePaginate(10);
-
-        foreach($posts as $i => $post) {
-            $posts[$i]->liked = Auth::user()->likesPost($post);
-            $posts[$i]->bookmarked = Auth::user()->hasBookmarked($post);
-            $posts[$i]->reposted = Auth::user()->hasReposted($post);
-        }
+        $posts = Inertia::scroll(function () {
+            return Post::query()
+                ->latest()
+                ->paginate(10)
+                ->through(function($post) {
+                    $post->liked = Auth::user()->likesPost($post); 
+                    $post->bookmarked = Auth::user()->hasBookmarked($post);
+                    $post->reposted = Auth::user()->hasReposted($post);
+                    
+                    return $post;
+                });
+        })->matchOn('id');
 
         return Inertia::render('Posts/Index', compact('posts'));
     }
@@ -71,12 +76,16 @@ class PostController extends Controller
         $post->bookmarked = Auth::user()->hasBookmarked($post);
         $post->reposted = Auth::user()->hasReposted($post);
 
-        return Inertia::render('Posts/Show', [
-            'post' => $post,
-            'replies' => Reply::query()
+        $replies = Inertia::scroll(fn () =>
+            Reply::query()
                 ->where('post_id', '=', $post->id)
                 ->latest()
-                ->simplePaginate(10),
+                ->paginate(10)
+        );
+
+        return Inertia::render('Posts/Show', [
+            'post' => $post,
+            'replies' => $replies,
         ]);
     }
 

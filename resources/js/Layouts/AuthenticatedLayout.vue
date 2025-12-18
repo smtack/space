@@ -160,7 +160,7 @@ const topUsers = usePage().props.topUsers;
                                     type="text"
                                     v-model="form.q"
                                     placeholder="Search..."
-                                    class="block w-full h-10 p-2 text-sm border-1 border-gray-300 focus:border-red-300 focus:outline-none focus:ring-3 focus:ring-red-200/50 rounded-md shadow-xs">
+                                    class="block w-full h-10 p-2 text-sm border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs">
                             </form>
                         </div>
                     </div>
@@ -221,7 +221,7 @@ const topUsers = usePage().props.topUsers;
 
                     <!-- Left menu -->
                     <div class="hidden sm:block col-span-3 my-3 xs:hidden">
-                        <div class="bg-white mx-auto p-4 rounded-lg">
+                        <div class="bg-white mx-auto p-2 rounded-lg">
                             <div>
                                 <NavLink
                                     :href="route('home')"
@@ -249,11 +249,6 @@ const topUsers = usePage().props.topUsers;
                                 </NavLink>
                             </div>
                         </div>
-                        <div class="bg-white mx-auto mt-3 p-4 rounded-lg">
-                            <div>
-                                <p class="text-gray-500 text-sm">&copy; {{ $page.props.appName + ' ' + new Date().getFullYear() }}</p>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- Center column -->
@@ -271,7 +266,7 @@ const topUsers = usePage().props.topUsers;
                                     type="text"
                                     v-model="form.q"
                                     placeholder="Search..."
-                                    class="block w-full h-10 p-2 text-sm border-1 border-gray-300 focus:border-red-300 focus:outline-none focus:ring-3 focus:ring-red-200/50 rounded-md shadow-xs">
+                                    class="block w-full h-10 p-2 text-sm border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs">
                             </form>
                         </div>
                         <div class="bg-white mx-auto mt-3 rounded-lg">
@@ -290,6 +285,11 @@ const topUsers = usePage().props.topUsers;
                                     class="w-full p-4 text-red-500 hover:bg-slate-100">
                                     Show More
                                 </Link>
+                            </div>
+                        </div>
+                        <div class="bg-white mx-auto mt-3 p-4 rounded-lg">
+                            <div>
+                                <p class="text-gray-500 text-sm">&copy; {{ $page.props.appName + ' ' + new Date().getFullYear() }}</p>
                             </div>
                         </div>
                     </div>

@@ -9,7 +9,7 @@ const redirect = () => {
 </script>
 
 <template>
-    <div @click="redirect" class="p-6 flex space-x-2 hover:bg-gray-100 hover:cursor-pointer">
+    <div @click="redirect" class="p-6 flex space-x-2 border-t border-gray-200 hover:bg-gray-100 hover:cursor-pointer">
         <Link v-on:click.stop :href="route('profile.index', user.username)">
             <img
                 class="h-12 w-12 rounded-full"
