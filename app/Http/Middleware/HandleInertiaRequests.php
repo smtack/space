@@ -46,7 +46,8 @@ class HandleInertiaRequests extends Middleware
                     ->withCount('followers')
                     ->orderBy('followers_count', 'DESC')
                     ->limit(5)
-                    ->get();
+                    ->get()
+                    ->toArray();
             }),
         ];
     }
