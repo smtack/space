@@ -32,6 +32,8 @@ dayjs.updateLocale('en', {
 
 const props = defineProps(['post']);
 
+const maxLength = 250;
+
 const form = useForm({
     message: props.post.message,
 });
@@ -102,15 +104,23 @@ const destroy = (id) => {
             <form v-if="editing" @submit.prevent="save">
                 <textarea
                     v-model="form.message"
+                    :maxlength="maxLength"
                     class="mt-4 w-full p-2 text-gray-900 border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs"
                 ></textarea>
+
+                <div class="flex justify-end text-sm text-gray-400">
+                    <span :class="{ 'text-red-600' : form.message.length >= maxLength }">{{ form.message.length }} / {{ maxLength }}</span>
+                </div>
+
                 <InputError :message="form.errors.message" class="mt-2" />
+
                 <div class="space-x-2">
                     <PrimaryButton class="mt-4">Save</PrimaryButton>
                     <button class="mt-4" @click="cancel">Cancel</button>
                 </div>
             </form>
-            <p v-else class="mt-4 text-md text-gray-900">{{ post.message }}</p>
+            
+            <p v-else class="mt-4 text-md text-gray-900 wrap-anywhere">{{ post.message }}</p>
         </div>
     </div>
 </template>

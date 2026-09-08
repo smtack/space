@@ -42,7 +42,7 @@ const unfollow = () => {
                     <h3 class="block mt-4 text-sm text-gray-600">Joined on {{ new Date(profile.created_at).toDateString() }}</h3>
                 </div>
 
-                <p class="my-4 text-sm text-gray-800 leading-relaxed">
+                <p class="my-4 text-sm text-gray-800 leading-relaxed wrap-anywhere">
                     {{ profile.bio }}
                 </p>
 

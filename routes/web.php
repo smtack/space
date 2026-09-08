@@ -11,15 +11,18 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::inertia('/', 'Welcome')->middleware('guest');
+Route::redirect('/', '/register');
 
 Route::get('/home', HomeController::class)->middleware(['auth'])->name('home');
 
 Route::get('/search', SearchController::class)->middleware('auth')->name('search');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile/{user:username}', [ProfileController::class, 'index'])->name('profile.index');
+    Route::resource('posts', PostController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
 
+    Route::resource('replies', ReplyController::class)->only(['store', 'update', 'destroy']);
+
+    Route::get('/profile/{user:username}', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('/edit-profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::patch('/bio', [ProfileController::class, 'bio'])->name('profile.bio');
@@ -30,11 +33,6 @@ Route::middleware('auth')->group(function () {
 
     Route::post('users/follow/{user}', [UserController::class, 'follow'])->name('users.follow');
     Route::post('users/unfollow/{user}', [UserController::class, 'unfollow'])->name('users.unfollow');
-});
-
-Route::middleware('auth')->group(function () {
-    Route::resource('posts', PostController::class)
-        ->only(['index', 'store', 'show', 'update', 'destroy']);
 
     Route::get('likes', [LikeController::class, 'index'])->name('posts.likes');
     Route::post('users/like/{post}', [LikeController::class, 'like'])->name('posts.like');
@@ -46,9 +44,6 @@ Route::middleware('auth')->group(function () {
 
     Route::post('users/repost/{post}', [RepostController::class, 'repost'])->name('posts.repost');
     Route::post('users/removeRepost/{post}', [RepostController::class, 'removeRepost'])->name('posts.removeRepost');
-
-    Route::resource('replies', ReplyController::class)
-        ->only(['store', 'update', 'destroy']);
 });
 
 require __DIR__.'/auth.php';

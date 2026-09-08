@@ -12,6 +12,8 @@ const props = defineProps({
     replies: Object,
 });
 
+const maxLength = 250;
+
 const replyform = useForm({
     message: '',
     post_id: props.post.id
@@ -38,9 +40,15 @@ const reply = () => {
             <form @submit.prevent="reply">
                 <textarea
                     v-model="replyform.message"
+                    :maxlength="maxLength"
                     placeholder="Post a reply..."
                     class="block w-full h-32  p-2 resize-none border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs"
                 ></textarea>
+
+                <div class="flex justify-end text-sm text-gray-400">
+                    <span :class="{ 'text-red-600' : replyform.message.length >= maxLength }">{{ replyform.message.length }} / {{ maxLength }}</span>
+                </div>
+                
                 <InputError :message="replyform.errors.message" class="mt-2" />
                 <PrimaryButton class="mt-4">Reply</PrimaryButton>
             </form>

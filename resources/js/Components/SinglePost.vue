@@ -12,6 +12,8 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 const props = defineProps(['post']);
 
+const maxLength = 500;
+
 const form = useForm({
     message: props.post.message,
 });
@@ -55,7 +57,8 @@ const toggleRepost = (post) => {
             <img
                 class="h-12 w-12 rounded-full"
                 :src="`/storage/avatars/${post.user.avatar}`"
-                alt="Avatar">
+                alt="Avatar"
+            />
         </Link>
         <div class="flex-1">
             <div class="flex justify-between items-center">
@@ -97,15 +100,25 @@ const toggleRepost = (post) => {
             
             <div>
                 <form v-if="editing" @submit.prevent="form.put(route('posts.update', post.id), { onSuccess: () => editing = false })">
-                    <textarea v-model="form.message" class="mt-4 w-full p-2 text-gray-900 border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs"></textarea>
+                    <textarea
+                        v-model="form.message"
+                        :maxlength="maxLength"
+                        class="mt-4 w-full p-2 text-gray-900 border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs"
+                    ></textarea>
+
                     <InputError :message="form.errors.message" class="mt-2" />
+
+                    <div class="text-right text-sm text-gray-500 mt-1">
+                        <span :class="{ 'text-red-600' : form.message.length >= maxLength }">{{ form.message.length }} / {{ maxLength }}</span>
+                    </div>
+
                     <div class="space-x-2">
                         <PrimaryButton class="mt-4">Save</PrimaryButton>
                         <button class="mt-4" @click="editing = false; form.reset(); form.clearErrors()">Cancel</button>
                     </div>
                 </form>
 
-                <p v-else class="mt-4 text-lg text-gray-900">{{ post.message }}</p>
+                <p v-else class="mt-4 text-lg text-gray-900 wrap-anywhere">{{ post.message }}</p>
 
                 <img
                     v-if="post.image"
@@ -115,9 +128,9 @@ const toggleRepost = (post) => {
                 >
             </div>
         </div>
-        </div>
+    </div>
 
-        <div class="px-6 py-3 border-y mt-8">
+    <div class="px-6 py-3 border-y mt-8">
         <div class="flex justify-between">
             <div class="flex items-center gap-2">
                 <LikeIcon

@@ -76,7 +76,7 @@ class ProfileController extends Controller
     public function bio(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'bio' => 'required|min:3|max:255',
+            'bio' => 'required|min:3|max:250',
         ]);
 
         $request->user()->update($validated);

@@ -32,7 +32,7 @@ class ReplyController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'message' => 'required|string|max:300',
+            'message' => 'required|string|max:250',
         ]);
 
         $validated['user_id'] = Auth::user()->id;
@@ -67,7 +67,7 @@ class ReplyController extends Controller
         Gate::authorize('update', $reply);
 
         $validated = $request->validate([
-            'message' => 'required|string|max:300',
+            'message' => 'required|string|max:250',
         ]);
 
         $reply->update($validated);

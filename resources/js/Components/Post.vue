@@ -38,6 +38,8 @@ const props = defineProps({
     post: Object,
 });
 
+const maxLength = 500;
+
 const form = useForm({
     message: props.post.message,
 });
@@ -147,18 +149,27 @@ const toggleRepost = (post) => {
                     </template>
                 </Dropdown>
             </div>
+
             <form v-if="editing" v-on:click.stop @submit.prevent="save">
                 <textarea
                     v-model="form.message"
+                    :maxlength="maxLength"
                     class="mt-4 w-full p-2 bg-white text-gray-900 border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs"
                 ></textarea>
+
+                <div class="text-right text-sm text-gray-500 mt-1">
+                    <span :class="{ 'text-red-600' : form.message.length >= maxLength }">{{ form.message.length }} / {{ maxLength }}</span>
+                </div>
+                
                 <InputError :message="form.errors.message" class="mt-2" />
+
                 <div class="space-x-2">
                     <PrimaryButton class="mt-4">Save</PrimaryButton>
                     <button class="mt-4" @click="cancel">Cancel</button>
                 </div>
             </form>
-            <p v-else class="mt-4 text-md text-gray-900">{{ post.message }}</p>
+
+            <p v-else class="mt-4 text-md text-gray-900 wrap-anywhere">{{ post.message }}</p>
 
             <img
                 v-if="post.image"
