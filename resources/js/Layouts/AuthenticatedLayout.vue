@@ -18,200 +18,144 @@ const topUsers = usePage().props.topUsers;
 </script>
 
 <template>
-    <div>
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            <nav
-                class="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800"
-            >
-                <!-- Primary Navigation Menu -->
-                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div class="flex h-16 justify-between">
-                        <div class="flex">
-                            <!-- Logo -->
-                            <div class="flex shrink-0 items-center">
-                                <Link :href="route('home')">
-                                    <ApplicationLogo
-                                        class="block h-8 w-auto text-[#FF2D30] lg:h-10 fill-current dark:text-gray-200"
-                                    />
-                                </Link>
-                            </div>
-                        </div>
-
-                        <div class="hidden sm:ms-6 sm:flex sm:items-center">
-                            <!-- Settings Dropdown -->
-                            <div class="relative ms-3">
-                                <Dropdown align="right" width="48">
-                                    <template #trigger>
-                                        <span class="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                class="inline-flex items-center rounded-md border border-transparent bg-white py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-hidden dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
-                                            >
-                                                <img class="h-9 w-9 rounded-full" :src="`/storage/avatars/${ $page.props.auth.user.avatar }`" alt="Avatar">
-                                            </button>
-                                        </span>
-                                    </template>
-
-                                    <template #content>
-                                        <DropdownLink
-                                            :href="route('profile.index', $page.props.auth.user.username)"
-                                        >
-                                            Your Profile
-                                        </DropdownLink>
-                                        <DropdownLink
-                                            :href="route('profile.edit')"
-                                        >
-                                            Edit Profile
-                                        </DropdownLink>
-                                        <DropdownLink
-                                            :href="route('logout')"
-                                            method="post"
-                                            as="button"
-                                        >
-                                            Log Out
-                                        </DropdownLink>
-                                    </template>
-                                </Dropdown>
-                            </div>
-                        </div>
-
-                        <!-- Hamburger -->
-                        <div class="-me-2 flex items-center sm:hidden">
-                            <button
-                                @click="
-                                    showingNavigationDropdown =
-                                        !showingNavigationDropdown
-                                "
-                                class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-hidden dark:text-gray-500 dark:hover:bg-gray-900 dark:hover:text-gray-400 dark:focus:bg-gray-900 dark:focus:text-gray-400"
-                            >
-                                <svg
-                                    class="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        :class="{
-                                            hidden: showingNavigationDropdown,
-                                            'inline-flex':
-                                                !showingNavigationDropdown,
-                                        }"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        :class="{
-                                            hidden: !showingNavigationDropdown,
-                                            'inline-flex':
-                                                showingNavigationDropdown,
-                                        }"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
+    <div class="w-full overflow-x-hidden">
+        <div class="min-h-screen w-full bg-gray-100 dark:bg-gray-900">
+            <!-- Responsive Navbar -->
+            <div class="flex justify-between lg:hidden bg-white">
+                <!-- Logo -->
+                <div class="shrink-0 m-4">
+                    <Link :href="route('home')">
+                        <ApplicationLogo
+                            class="block h-10 w-auto text-[#FF2D30] lg:h-10 fill-current dark:text-gray-200"
+                        />
+                    </Link>
                 </div>
 
-                <!-- Responsive Navigation Menu -->
-                <div
-                    :class="{
-                        block: showingNavigationDropdown,
-                        hidden: !showingNavigationDropdown,
-                    }"
-                    class="sm:hidden"
-                >
-                    <div class="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink
-                            :href="route('home')"
-                            :active="route().current('home')"
-                        >
-                            Home
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            :href="route('posts.index')"
-                            :active="route().current('posts.index')"
-                        >
-                            Posts
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            :href="route('posts.likes')"
-                            :active="route().current('posts.likes')"
-                        >
-                            Likes
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            :href="route('posts.bookmarks')"
-                            :active="route().current('posts.bookmarks')"
-                        >
-                            Bookmarks
-                        </ResponsiveNavLink>
-                    </div>
-
-                    <div class="py-2">
-                        <div class="bg-white mx-auto p-2 rounded-lg">
-                            <form @submit.prevent="form.get(route('search'))">
-                                <input
-                                    type="text"
-                                    v-model="form.q"
-                                    placeholder="Search..."
-                                    class="block w-full h-10 p-2 text-sm border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs">
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- Responsive Settings Options -->
-                    <div
-                        class="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600"
+                <!-- Hamburger -->
+                <div class="flex m-4 items-center">
+                    <button
+                        @click="
+                            showingNavigationDropdown =
+                                !showingNavigationDropdown
+                        "
+                        class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-hidden dark:text-gray-500 dark:hover:bg-gray-900 dark:hover:text-gray-400 dark:focus:bg-gray-900 dark:focus:text-gray-400"
                     >
-                        <div class="px-4">
-                            <div
-                                class="text-base font-medium text-gray-800 dark:text-gray-200"
-                            >
-                                {{ $page.props.auth.user.name }}
-                            </div>
-                            <div class="text-sm font-medium text-gray-500">
-                                {{ $page.props.auth.user.email }}
-                            </div>
-                        </div>
+                        <svg
+                            class="h-6 w-6"
+                            stroke="currentColor"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                :class="{
+                                    hidden: showingNavigationDropdown,
+                                    'inline-flex':
+                                        !showingNavigationDropdown,
+                                }"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"
+                            />
+                            <path
+                                :class="{
+                                    hidden: !showingNavigationDropdown,
+                                    'inline-flex':
+                                        showingNavigationDropdown,
+                                }"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"
+                            />
+                        </svg>
+                    </button>
+                </div>
+            </div>
 
-                        <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.index', $page.props.auth.user.username)">
-                                Your Profile
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('profile.edit')">
-                                Edit Profile
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink
-                                :href="route('logout')"
-                                method="post"
-                                as="button"
-                            >
-                                Log Out
-                            </ResponsiveNavLink>
-                        </div>
+            <!-- Responsive Navigation Menu -->
+            <div
+                :class="{
+                    block: showingNavigationDropdown,
+                    hidden: !showingNavigationDropdown,
+                }"
+                class="lg:hidden bg-white"
+            >
+                <div class="space-y-1 pb-3 pt-2">
+                    <ResponsiveNavLink
+                        :href="route('home')"
+                        :active="route().current('home')"
+                    >
+                        Home
+                    </ResponsiveNavLink>
+                    <ResponsiveNavLink
+                        :href="route('explore')"
+                        :active="route().current('explore')"
+                    >
+                        Explore
+                    </ResponsiveNavLink>
+                    <ResponsiveNavLink
+                        :href="route('posts.likes')"
+                        :active="route().current('posts.likes')"
+                    >
+                        Likes
+                    </ResponsiveNavLink>
+                    <ResponsiveNavLink
+                        :href="route('posts.bookmarks')"
+                        :active="route().current('posts.bookmarks')"
+                    >
+                        Bookmarks
+                    </ResponsiveNavLink>
+                </div>
+
+                <div class="py-2">
+                    <div class="bg-white mx-auto p-2 rounded-lg">
+                        <form @submit.prevent="form.get(route('search'))">
+                            <input
+                                type="text"
+                                v-model="form.q"
+                                placeholder="Search..."
+                                class="block w-full h-10 p-2 text-sm border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs">
+                        </form>
                     </div>
                 </div>
-            </nav>
 
-            <!-- Page Heading -->
-            <header
-                class="bg-white shadow-sm dark:bg-gray-800"
-                v-if="$slots.header"
-            >
-                <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                    <slot name="header" />
+                <!-- Responsive Settings Options -->
+                <div
+                    class="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600"
+                >
+                    <div class="px-4">
+                        <div
+                            class="text-base font-medium text-gray-800 dark:text-gray-200"
+                        >
+                            {{ $page.props.auth.user.name }}
+                        </div>
+                        <div class="text-sm font-medium text-gray-500">
+                            {{ $page.props.auth.user.email }}
+                        </div>
+                    </div>
+
+                    <div class="mt-3 space-y-1">
+                        <ResponsiveNavLink :href="route('profile.index', $page.props.auth.user.username)">
+                            Your Profile
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('profile.edit')">
+                            Edit Profile
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('logout')"
+                            method="post"
+                            as="button"
+                        >
+                            Log Out
+                        </ResponsiveNavLink>
+                    </div>
                 </div>
-            </header>
+            </div>
 
             <!-- Page Content -->
             <main>
-                <div class="grid grid-cols-2 sm:grid-cols-12 gap-3 mx-auto max-w-7xl sm:px-6 lg:px-8 justify-items-stretch">
+                <div class="grid grid-cols-2 lg:grid-cols-12 gap-3 mx-auto max-w-7xl px-3 sm:px-6 justify-items-stretch">
                     <!-- Flash message -->
                     <div
                         class="col-span-12 mt-6 bg-red-500 rounded-md relative p-6"
@@ -220,9 +164,18 @@ const topUsers = usePage().props.topUsers;
                     </div>
 
                     <!-- Left menu -->
-                    <div class="hidden sm:block col-span-3 my-3 xs:hidden">
+                    <div class="hidden lg:block col-span-3 my-3">
                         <div class="bg-white mx-auto p-2 rounded-lg">
                             <div>
+                                <!-- Logo -->
+                                <div class="flex shrink-0 items-center my-4 mx-2">
+                                    <Link :href="route('home')">
+                                        <ApplicationLogo
+                                            class="block h-8 w-auto text-[#FF2D30] lg:h-10 fill-current dark:text-gray-200"
+                                        />
+                                    </Link>
+                                </div>
+
                                 <NavLink
                                     :href="route('home')"
                                     :active="route().current('home')"
@@ -230,10 +183,10 @@ const topUsers = usePage().props.topUsers;
                                     Home
                                 </NavLink>
                                 <NavLink
-                                    :href="route('posts.index')"
-                                    :active="route().current('posts.index')"
+                                    :href="route('explore')"
+                                    :active="route().current('explore')"
                                 >
-                                    Posts
+                                    Explore
                                 </NavLink>
                                 <NavLink
                                     :href="route('posts.likes')"
@@ -247,19 +200,55 @@ const topUsers = usePage().props.topUsers;
                                 >
                                     Bookmarks
                                 </NavLink>
+
+                                <!-- Settings Dropdown -->
+                                <div class="relative ms-3">
+                                    <Dropdown align="left" width="48">
+                                        <template #trigger>
+                                            <span class="inline-flex rounded-md">
+                                                <button
+                                                    type="button"
+                                                    class="inline-flex items-center rounded-md border border-transparent bg-white py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-hidden dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
+                                                >
+                                                    <img class="h-12 w-12 rounded-full" :src="`/storage/avatars/${ $page.props.auth.user.avatar }`" alt="Avatar">
+                                                </button>
+                                            </span>
+                                        </template>
+
+                                        <template #content>
+                                            <DropdownLink
+                                                :href="route('profile.index', $page.props.auth.user.username)"
+                                            >
+                                                Your Profile
+                                            </DropdownLink>
+                                            <DropdownLink
+                                                :href="route('profile.edit')"
+                                            >
+                                                Edit Profile
+                                            </DropdownLink>
+                                            <DropdownLink
+                                                :href="route('logout')"
+                                                method="post"
+                                                as="button"
+                                            >
+                                                Log Out
+                                            </DropdownLink>
+                                        </template>
+                                    </Dropdown>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Center column -->
-                    <div class="col-span-12 sm:col-span-6 my-3">
+                    <div class="col-span-12 lg:col-span-6 my-3">
                         <div class="bg-white mx-auto rounded-lg">
                             <slot />
                         </div>
                     </div>
 
                     <!-- Right column -->
-                    <div class="hidden sm:block col-span-3 my-3">
+                    <div class="hidden lg:block col-span-3 my-3">
                         <div class="bg-white mx-auto p-4 rounded-lg">
                             <form @submit.prevent="form.get(route('search'))">
                                 <input

@@ -19,20 +19,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Inertia::scroll(function () {
-            return Post::query()
-                ->latest()
-                ->paginate(10)
-                ->through(function($post) {
-                    $post->liked = Auth::user()->likesPost($post); 
-                    $post->bookmarked = Auth::user()->hasBookmarked($post);
-                    $post->reposted = Auth::user()->hasReposted($post);
-                    
-                    return $post;
-                });
-        })->matchOn('id');
-
-        return Inertia::render('Posts/Index', compact('posts'));
+        //
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookmarkController;
+use App\Http\Controllers\ExploreController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
@@ -11,14 +12,24 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/register');
-
-Route::get('/home', HomeController::class)->middleware(['auth'])->name('home');
-
-Route::get('/search', SearchController::class)->middleware('auth')->name('search');
+Route::redirect('/', '/home');
 
 Route::middleware('auth')->group(function () {
-    Route::resource('posts', PostController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+    Route::get('/home', HomeController::class)->name('home');
+
+    Route::get('/explore', ExploreController::class)->name('explore');
+
+    Route::get('/likes', [LikeController::class, 'index'])->name('posts.likes');
+    Route::post('/users/like/{post}', [LikeController::class, 'like'])->name('posts.like');
+    Route::post('/users/unlike/{post}', [LikeController::class, 'unlike'])->name('posts.unlike');
+
+    Route::get('/bookmarks', [BookmarkController::class, 'index'])->name('posts.bookmarks');
+    Route::post('/users/bookmark/{post}', [BookmarkController::class, 'bookmark'])->name('posts.bookmark');
+    Route::post('/users/removeBookmark/{post}', [BookmarkController::class, 'removeBookmark'])->name('posts.removeBookmark');
+
+    Route::get('/search', SearchController::class)->name('search');
+
+    Route::resource('posts', PostController::class)->only(['store', 'show', 'update', 'destroy']);
 
     Route::resource('replies', ReplyController::class)->only(['store', 'update', 'destroy']);
 
@@ -31,19 +42,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/users', [UserController::class, 'index'])->name('users');
 
-    Route::post('users/follow/{user}', [UserController::class, 'follow'])->name('users.follow');
-    Route::post('users/unfollow/{user}', [UserController::class, 'unfollow'])->name('users.unfollow');
+    Route::post('/users/follow/{user}', [UserController::class, 'follow'])->name('users.follow');
+    Route::post('/users/unfollow/{user}', [UserController::class, 'unfollow'])->name('users.unfollow');
 
-    Route::get('likes', [LikeController::class, 'index'])->name('posts.likes');
-    Route::post('users/like/{post}', [LikeController::class, 'like'])->name('posts.like');
-    Route::post('users/unlike/{post}', [LikeController::class, 'unlike'])->name('posts.unlike');
-
-    Route::get('bookmarks', [BookmarkController::class, 'index'])->name('posts.bookmarks');
-    Route::post('users/bookmark/{post}', [BookmarkController::class, 'bookmark'])->name('posts.bookmark');
-    Route::post('users/removeBookmark/{post}', [BookmarkController::class, 'removeBookmark'])->name('posts.removeBookmark');
-
-    Route::post('users/repost/{post}', [RepostController::class, 'repost'])->name('posts.repost');
-    Route::post('users/removeRepost/{post}', [RepostController::class, 'removeRepost'])->name('posts.removeRepost');
+    Route::post('/users/repost/{post}', [RepostController::class, 'repost'])->name('posts.repost');
+    Route::post('/users/removeRepost/{post}', [RepostController::class, 'removeRepost'])->name('posts.removeRepost');
 });
 
 require __DIR__.'/auth.php';

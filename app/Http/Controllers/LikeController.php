@@ -26,7 +26,7 @@ class LikeController extends Controller
                 });
         })->matchOn('id');
 
-        return Inertia::render('Posts/Likes', compact('posts'));
+        return Inertia::render('Likes', compact('posts'));
     }
 
     public function like(Post $post)

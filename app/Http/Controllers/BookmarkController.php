@@ -25,7 +25,7 @@ class BookmarkController extends Controller
                 });
         })->matchOn('id');
 
-        return Inertia::render('Posts/Bookmarks', compact('posts'));
+        return Inertia::render('Bookmarks', compact('posts'));
     }
 
     public function bookmark(Post $post)
