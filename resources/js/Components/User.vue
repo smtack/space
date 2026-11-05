@@ -25,7 +25,8 @@ const redirect = () => {
                     </Link>
                 </div>
             </div>
-            <p class="mt-4 text-md text-gray-900">{{ user.bio }}</p>
+
+            <p class="mt-4 text-md text-gray-800">{{ user.bio }}</p>
         </div>
     </div>
 </template>

@@ -1,11 +1,10 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import User from '@/Components/User.vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
@@ -15,6 +14,7 @@ const form = useForm({
 });
 
 const topUsers = usePage().props.topUsers;
+const trendingTopics = computed(() => usePage().props.trendingTopics ?? []);
 </script>
 
 <template>
@@ -93,6 +93,12 @@ const topUsers = usePage().props.topUsers;
                         :active="route().current('explore')"
                     >
                         Explore
+                    </ResponsiveNavLink>
+                    <ResponsiveNavLink
+                        :href="route('users')"
+                        :active="route().current('users')"
+                    >
+                        Users
                     </ResponsiveNavLink>
                     <ResponsiveNavLink
                         :href="route('posts.likes')"
@@ -189,6 +195,12 @@ const topUsers = usePage().props.topUsers;
                                     Explore
                                 </NavLink>
                                 <NavLink
+                                    :href="route('users')"
+                                    :active="route().current('users')"
+                                >
+                                    Users
+                                </NavLink>
+                                <NavLink
                                     :href="route('posts.likes')"
                                     :active="route().current('posts.likes')"
                                 >
@@ -249,6 +261,7 @@ const topUsers = usePage().props.topUsers;
 
                     <!-- Right column -->
                     <div class="hidden lg:block col-span-3 my-3">
+                        <!-- Search Form -->
                         <div class="bg-white mx-auto p-4 rounded-lg">
                             <form @submit.prevent="form.get(route('search'))">
                                 <input
@@ -258,24 +271,70 @@ const topUsers = usePage().props.topUsers;
                                     class="block w-full h-10 p-2 text-sm border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs">
                             </form>
                         </div>
+
+                        <!-- Trending Topics -->
+                        <div class="bg-white mx-auto mt-3 rounded-lg">
+                            <h1 class="font-bold p-4">Trending Topics</h1>
+                            <div v-if="trendingTopics.length">
+                                <Link
+                                    v-for="topic in trendingTopics"
+                                    :key="topic.name"
+                                    :href="route('search', { q: topic.name })"
+                                    class="block p-4 text-red-500 hover:bg-slate-100"
+                                >
+                                    <div class="font-semibold">
+                                        {{ topic.name }}
+                                    </div>
+
+                                    <div class="text-xs text-gray-500">
+                                        {{ topic.count }} posts
+                                    </div>
+                                </Link>
+                            </div>
+                            <div v-else class="p-4 text-sm text-gray-500">
+                                No trending topics right now.
+                            </div>
+                        </div>
+
+                        <!-- Top Users -->
                         <div class="bg-white mx-auto mt-3 rounded-lg">
                             <h1 class="font-bold p-4">Top Users</h1>
                             <div>
-                                <User
+                                <Link
+                                    :href="route('profile.index', user.username)"
                                     v-for="user in topUsers"
                                     :key="user.id"
-                                    :user="user"
-                                    class="w-full py-4 px-4"
-                                />
+                                    class="w-full px-4 py-2 flex space-x-2 hover:bg-gray-100 hover:cursor-pointer"
+                                >
+                                    <Link v-on:click.stop :href="route('profile.index', user.username)">
+                                        <img
+                                            class="h-12 w-12 rounded-full"
+                                            :src="`/storage/avatars/${user.avatar}`"
+                                            alt="Avatar">
+                                    </Link>
+                                    <div class="flex-1">
+                                        <div class="flex justify-between items-center">
+                                            <div>
+                                                <Link v-on:click.stop :href="route('profile.index', user.username)">
+                                                    <span class="text-gray-800 hover:underline">{{ user.name }}</span>
+                                                    <span class="block text-sm text-gray-600 hover:underline">@{{ user.username }}</span>
+                                                </Link>
+                                            </div>
+                                        </div>
+                                        <p class="mt-4 text-md text-gray-900">{{ user.bio }}</p>
+                                    </div>
+                                </Link>
 
                                 <Link
                                     :href="route('users')"
                                     as="button"
-                                    class="w-full p-4 text-red-500 hover:bg-slate-100">
+                                    class="w-full p-4 text-sm text-red-500 hover:bg-slate-100">
                                     Show More
                                 </Link>
                             </div>
                         </div>
+
+                        <!-- Footer -->
                         <div class="bg-white mx-auto mt-3 p-4 rounded-lg">
                             <div>
                                 <p class="text-gray-500 text-sm">&copy; {{ $page.props.appName + ' ' + new Date().getFullYear() }}</p>
