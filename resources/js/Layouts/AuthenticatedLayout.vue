@@ -21,7 +21,7 @@ const trendingTopics = computed(() => usePage().props.trendingTopics ?? []);
     <div class="w-full overflow-x-hidden">
         <div class="min-h-screen w-full bg-gray-100 dark:bg-gray-900">
             <!-- Responsive Navbar -->
-            <div class="flex justify-between lg:hidden bg-white">
+            <div class="flex justify-between lg:hidden bg-white dark:bg-gray-800">
                 <!-- Logo -->
                 <div class="shrink-0 m-4">
                     <Link :href="route('home')">
@@ -79,7 +79,7 @@ const trendingTopics = computed(() => usePage().props.trendingTopics ?? []);
                     block: showingNavigationDropdown,
                     hidden: !showingNavigationDropdown,
                 }"
-                class="lg:hidden bg-white"
+                class="lg:hidden bg-white dark:bg-gray-800"
             >
                 <div class="space-y-1 pb-3 pt-2">
                     <ResponsiveNavLink
@@ -112,16 +112,22 @@ const trendingTopics = computed(() => usePage().props.trendingTopics ?? []);
                     >
                         Bookmarks
                     </ResponsiveNavLink>
+                    <ResponsiveNavLink
+                        :href="route('profile.index', $page.props.auth.user.username)"
+                        :active="route().current('profile.index')"
+                    >
+                        Profile
+                    </ResponsiveNavLink>
                 </div>
 
                 <div class="py-2">
-                    <div class="bg-white mx-auto p-2 rounded-lg">
+                    <div class="bg-white dark:bg-gray-800 mx-auto p-2 rounded-lg">
                         <form @submit.prevent="form.get(route('search'))">
                             <input
                                 type="text"
                                 v-model="form.q"
                                 placeholder="Search..."
-                                class="block w-full h-10 p-2 text-sm border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs">
+                                class="block w-full h-10 p-2 text-sm border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs *:dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300">
                         </form>
                     </div>
                 </div>
@@ -142,11 +148,8 @@ const trendingTopics = computed(() => usePage().props.trendingTopics ?? []);
                     </div>
 
                     <div class="mt-3 space-y-1">
-                        <ResponsiveNavLink :href="route('profile.index', $page.props.auth.user.username)">
-                            Your Profile
-                        </ResponsiveNavLink>
                         <ResponsiveNavLink :href="route('profile.edit')">
-                            Edit Profile
+                            Settings
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             :href="route('logout')"
@@ -171,7 +174,7 @@ const trendingTopics = computed(() => usePage().props.trendingTopics ?? []);
 
                     <!-- Left menu -->
                     <div class="hidden lg:block col-span-3 my-3">
-                        <div class="bg-white mx-auto p-2 rounded-lg">
+                        <div class="mx-auto p-2 rounded-lg bg-white dark:bg-gray-800">
                             <div>
                                 <!-- Logo -->
                                 <div class="flex shrink-0 items-center my-4 mx-2">
@@ -212,6 +215,12 @@ const trendingTopics = computed(() => usePage().props.trendingTopics ?? []);
                                 >
                                     Bookmarks
                                 </NavLink>
+                                <NavLink
+                                    :href="route('profile.index', $page.props.auth.user.username)"
+                                    :active="route().current('profile.index')"
+                                >
+                                    Profile
+                                </NavLink>
 
                                 <!-- Settings Dropdown -->
                                 <div class="relative ms-3">
@@ -229,14 +238,9 @@ const trendingTopics = computed(() => usePage().props.trendingTopics ?? []);
 
                                         <template #content>
                                             <DropdownLink
-                                                :href="route('profile.index', $page.props.auth.user.username)"
-                                            >
-                                                Your Profile
-                                            </DropdownLink>
-                                            <DropdownLink
                                                 :href="route('profile.edit')"
                                             >
-                                                Edit Profile
+                                                Settings
                                             </DropdownLink>
                                             <DropdownLink
                                                 :href="route('logout')"
@@ -254,7 +258,7 @@ const trendingTopics = computed(() => usePage().props.trendingTopics ?? []);
 
                     <!-- Center column -->
                     <div class="col-span-12 lg:col-span-6 my-3">
-                        <div class="bg-white mx-auto rounded-lg">
+                        <div class="mx-auto rounded-lg bg-white dark:bg-gray-800">
                             <slot />
                         </div>
                     </div>
@@ -262,49 +266,49 @@ const trendingTopics = computed(() => usePage().props.trendingTopics ?? []);
                     <!-- Right column -->
                     <div class="hidden lg:block col-span-3 my-3">
                         <!-- Search Form -->
-                        <div class="bg-white mx-auto p-4 rounded-lg">
+                        <div class="mx-auto p-4 rounded-lg bg-white dark:bg-gray-800">
                             <form @submit.prevent="form.get(route('search'))">
                                 <input
                                     type="text"
                                     v-model="form.q"
                                     placeholder="Search..."
-                                    class="block w-full h-10 p-2 text-sm border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs">
+                                    class="block w-full h-10 p-2 text-sm border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300">
                             </form>
                         </div>
 
                         <!-- Trending Topics -->
-                        <div class="bg-white mx-auto mt-3 rounded-lg">
-                            <h1 class="font-bold p-4">Trending Topics</h1>
+                        <div class="mx-auto mt-3 rounded-lg bg-white dark:bg-gray-800">
+                            <h1 class="font-bold p-4 dark:text-gray-300">Trending Topics</h1>
                             <div v-if="trendingTopics.length">
                                 <Link
                                     v-for="topic in trendingTopics"
                                     :key="topic.name"
                                     :href="route('search', { q: topic.name })"
-                                    class="block p-4 text-red-500 hover:bg-slate-100"
+                                    class="block p-4 text-red-500 hover:bg-slate-100 dark:hover:bg-gray-700"
                                 >
                                     <div class="font-semibold">
                                         {{ topic.name }}
                                     </div>
 
-                                    <div class="text-xs text-gray-500">
+                                    <div class="text-xs text-gray-500 dark:text-gray-400">
                                         {{ topic.count }} posts
                                     </div>
                                 </Link>
                             </div>
-                            <div v-else class="p-4 text-sm text-gray-500">
+                            <div v-else class="p-4 text-sm text-gray-500 dark:text-gray-400">
                                 No trending topics right now.
                             </div>
                         </div>
 
                         <!-- Top Users -->
-                        <div class="bg-white mx-auto mt-3 rounded-lg">
-                            <h1 class="font-bold p-4">Top Users</h1>
+                        <div class="mx-auto mt-3 rounded-lg bg-white dark:bg-gray-800">
+                            <h1 class="font-bold p-4 dark:text-gray-300">Top Users</h1>
                             <div>
                                 <Link
                                     :href="route('profile.index', user.username)"
                                     v-for="user in topUsers"
                                     :key="user.id"
-                                    class="w-full px-4 py-2 flex space-x-2 hover:bg-gray-100 hover:cursor-pointer"
+                                    class="w-full px-4 py-2 flex space-x-2 hover:bg-gray-100 hover:cursor-pointer dark:hover:bg-gray-700"
                                 >
                                     <Link v-on:click.stop :href="route('profile.index', user.username)">
                                         <img
@@ -316,8 +320,8 @@ const trendingTopics = computed(() => usePage().props.trendingTopics ?? []);
                                         <div class="flex justify-between items-center">
                                             <div>
                                                 <Link v-on:click.stop :href="route('profile.index', user.username)">
-                                                    <span class="text-gray-800 hover:underline">{{ user.name }}</span>
-                                                    <span class="block text-sm text-gray-600 hover:underline">@{{ user.username }}</span>
+                                                    <span class="text-gray-800 dark:text-gray-300 hover:underline">{{ user.name }}</span>
+                                                    <span class="block text-sm text-gray-600 dark:text-gray-400 hover:underline">@{{ user.username }}</span>
                                                 </Link>
                                             </div>
                                         </div>
@@ -328,16 +332,16 @@ const trendingTopics = computed(() => usePage().props.trendingTopics ?? []);
                                 <Link
                                     :href="route('users')"
                                     as="button"
-                                    class="w-full p-4 text-sm text-red-500 hover:bg-slate-100">
+                                    class="w-full p-4 text-sm text-red-500 hover:bg-slate-100 dark:hover:bg-gray-700">
                                     Show More
                                 </Link>
                             </div>
                         </div>
 
                         <!-- Footer -->
-                        <div class="bg-white mx-auto mt-3 p-4 rounded-lg">
+                        <div class="mx-auto mt-3 p-4 rounded-lg bg-white dark:bg-gray-800">
                             <div>
-                                <p class="text-gray-500 text-sm">&copy; {{ $page.props.appName + ' ' + new Date().getFullYear() }}</p>
+                                <p class="text-gray-500 dark:text-gray-300 text-sm">&copy; {{ $page.props.appName + ' ' + new Date().getFullYear() }}</p>
                             </div>
                         </div>
                     </div>

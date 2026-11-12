@@ -37,12 +37,12 @@ const unfollow = () => {
             </div>
             <div class="flex-1 min-w-0">
                 <div class="space-y-1">
-                    <h1 class="block text-gray-800 truncate">{{ profile.name }}</h1>
-                    <h2 class="block text-sm text-gray-400">@{{ profile.username }}</h2>
-                    <h3 class="block mt-4 text-sm text-gray-600">Joined on {{ new Date(profile.created_at).toDateString() }}</h3>
+                    <h1 class="block text-gray-800 dark:text-gray-300 truncate">{{ profile.name }}</h1>
+                    <h2 class="block text-sm text-gray-400 dark:text-gray-500">@{{ profile.username }}</h2>
+                    <h3 class="block mt-4 text-sm text-gray-600 dark:text-gray-400">Joined on {{ new Date(profile.created_at).toDateString() }}</h3>
                 </div>
 
-                <p class="my-4 text-sm text-gray-800 leading-relaxed wrap-anywhere">
+                <p class="my-4 text-sm text-gray-800 dark:text-gray-300 leading-relaxed wrap-anywhere">
                     {{ profile.bio }}
                 </p>
 

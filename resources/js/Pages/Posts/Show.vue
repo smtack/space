@@ -4,7 +4,6 @@ import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import Reply from '@/Components/Reply.vue';
 import { Head, InfiniteScroll, useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
 import SinglePost from '@/Components/SinglePost.vue';
 
 const props = defineProps({
@@ -42,7 +41,7 @@ const reply = () => {
                     v-model="replyform.message"
                     :maxlength="maxLength"
                     placeholder="Post a reply..."
-                    class="block w-full h-32  p-2 resize-none border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs"
+                    class="block w-full h-32 p-2 resize-none border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
                 ></textarea>
 
                 <div class="flex justify-end text-sm text-gray-400">

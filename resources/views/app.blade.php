@@ -17,6 +17,18 @@
         <link rel="manifest" href="Favicons/site.webmanifest">
 
         <!-- Scripts -->
+        <script>
+            (() => {
+                const appearance = @json(auth()->user()?->appearance ?? 'system');
+
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+                const dark = appearance === 'dark' || (appearance === 'system' && prefersDark);
+
+                document.documentElement.classList.toggle('dark', dark);
+            })();
+        </script>
+
         @routes
         @inertiaHead
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])

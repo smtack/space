@@ -15,18 +15,18 @@ dayjs.extend(updateLocale);
 dayjs.updateLocale('en', {
   relativeTime: {
     future: "in %s",
-    past: "%s ago",
+    past: "%s",
     s: 'a few seconds',
-    m: "1 minute",
-    mm: "%d minutes",
-    h: "1 hour",
-    hh: "%d hours",
-    d: "1 day",
-    dd: "%d days",
-    M: "1 month",
-    MM: "%d months",
-    y: "1 year",
-    yy: "%d years"
+    m: "1m",
+    mm: "%dm",
+    h: "1h",
+    hh: "%dh",
+    d: "1d",
+    dd: "%dd",
+    M: "1m",
+    MM: "%dm",
+    y: "1y",
+    yy: "%dy"
   }
 })
 
@@ -77,11 +77,11 @@ const destroy = (id) => {
             <div class="flex justify-between items-center">
                 <div>
                     <Link :href="route('profile.index', post.user.username)">
-                        <span class="text-gray-800">{{ post.user.name }}</span>
-                        <span class="text-sm ml-2 text-gray-600">@{{ post.user.username }}</span>
+                        <span class="text-gray-800 dark:text-gray-400">{{ post.user.name }}</span>
+                        <span class="text-sm ml-2 text-gray-600 dark:text-gray-300">@{{ post.user.username }}</span>
                     </Link>
-                    <small class="ml-2 text-sm text-gray-400">&middot; {{ dayjs(post.created_at).fromNow(true) }}</small>
-                    <small v-if="post.created_at !== post.updated_at" class="text-sm text-gray-600"> &middot; edited</small>
+                    <small class="ml-2 text-sm text-gray-400 dark:text-gray-500">&middot; {{ dayjs(post.created_at).fromNow(true) }}</small>
+                    <small v-if="post.created_at !== post.updated_at" class="text-sm text-gray-600 dark:text-gray-400"> &middot; edited</small>
                 </div>
                 <Dropdown v-if="post.user_id === $page.props.auth.user.id">
                     <template #trigger>
@@ -92,7 +92,7 @@ const destroy = (id) => {
                         </button>
                     </template>
                     <template #content>
-                        <button class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 transition duration-150 ease-in-out" @click="editing = true">
+                        <button class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 dark:text-gray-300 hover:bg-gray-100 focus:bg-gray-100 dark:hover:bg-gray-700 dark:focus:bg-gray-700 transition duration-150 ease-in-out" @click="editing = true">
                             Edit
                         </button>
                         <DropdownLink as="button" @click="destroy(post.id)">
@@ -105,7 +105,7 @@ const destroy = (id) => {
                 <textarea
                     v-model="form.message"
                     :maxlength="maxLength"
-                    class="mt-4 w-full p-2 text-gray-900 border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs"
+                    class="mt-4 w-full p-2 text-gray-900 border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md shadow-xs"
                 ></textarea>
 
                 <div class="flex justify-end text-sm text-gray-400">
@@ -116,11 +116,11 @@ const destroy = (id) => {
 
                 <div class="space-x-2">
                     <PrimaryButton class="mt-4">Save</PrimaryButton>
-                    <button class="mt-4" @click="cancel">Cancel</button>
+                    <button class="mt-4 dark:text-gray-400" @click="cancel">Cancel</button>
                 </div>
             </form>
             
-            <p v-else class="mt-4 text-md text-gray-900 wrap-anywhere">{{ post.message }}</p>
+            <p v-else class="mt-4 text-md text-gray-900 dark:text-gray-300 wrap-anywhere">{{ post.message }}</p>
         </div>
     </div>
 </template>

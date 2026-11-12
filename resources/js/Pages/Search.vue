@@ -20,7 +20,7 @@ const toggleUsers = ref(false);
         <nav>
             <button
                 @click="toggleUsers = false"
-                class="py-4 w-[50%] border-b-4 hover:bg-slate-50 hover:border-b-red-500"
+                class="py-4 w-[50%] border-b-4 hover:bg-slate-50 hover:border-b-red-500 dark:hover:bg-gray-700 dark:text-gray-300"
                 :class="{
                     'border-b-red-500': !toggleUsers
                 }">
@@ -28,7 +28,7 @@ const toggleUsers = ref(false);
             </button>
             <button
                 @click="toggleUsers = true"
-                class="py-4 w-[50%] border-b-4 hover:bg-slate-50 hover:border-b-red-500"
+                class="py-4 w-[50%] border-b-4 hover:bg-slate-50 hover:border-b-red-500 dark:hover:bg-gray-700 dark:text-gray-300"
                 :class="{
                     'border-b-red-500': toggleUsers
                 }">

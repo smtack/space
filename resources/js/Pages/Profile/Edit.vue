@@ -5,6 +5,7 @@ import UpdateBioForm from './Partials/UpdateBioForm.vue';
 import DeleteUserForm from './Partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
+import UpdateAppearanceForm from './Partials/UpdateAppearanceForm.vue/index.js';
 import { Head } from '@inertiajs/vue3';
 
 defineProps({
@@ -23,7 +24,7 @@ defineProps({
     <AuthenticatedLayout>
         <div>
             <div class="p-4 sm:p-8 border-b border-gray-300">
-                <h2 class="text-xl font-semibold leading-tight text-gray-800">Edit Profile</h2>
+                <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-300">Settings</h2>
             </div>
 
             <div class="p-4 sm:p-8">
@@ -40,6 +41,10 @@ defineProps({
 
             <div class="p-4 sm:p-8">
                 <UpdateAvatarForm class="max-w-xl" />
+            </div>
+
+            <div class="p-4 sm:p-8">
+                <UpdateAppearanceForm class="max-w-xl" />
             </div>
 
             <div class="p-4 sm:p-8">

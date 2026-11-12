@@ -64,10 +64,10 @@ const toggleRepost = (post) => {
             <div class="flex justify-between items-center">
                 <div>
                     <Link :href="route('profile.index', post.user.username)">
-                        <span class="text-gray-800 hover:underline">{{ post.user.name }}</span>
-                        <span class="text-sm ml-2 text-gray-600 hover:underline">@{{ post.user.username }}</span>
+                        <span class="text-gray-800 dark:text-gray-400 hover:underline">{{ post.user.name }}</span>
+                        <span class="text-sm ml-2 text-gray-600 dark:text-gray-300 hover:underline">@{{ post.user.username }}</span>
                     </Link>
-                    <small class="ml-2 text-sm text-gray-400">
+                    <small class="ml-2 text-sm text-gray-400 dark:text-gray-500">
                         {{ new Date(post.created_at).toLocaleDateString('en-GB', {
                             month: 'long',
                             day: 'numeric',
@@ -77,7 +77,7 @@ const toggleRepost = (post) => {
                             hour12: false,
                         }) }}
                     </small>
-                    <small v-if="post.created_at !== post.updated_at" class="text-sm text-gray-600"> &middot; edited</small>
+                    <small v-if="post.created_at !== post.updated_at" class="text-sm text-gray-600 dark:text-gray-400"> &middot; edited</small>
                 </div>
                 <Dropdown v-if="post.user_id === $page.props.auth.user.id">
                     <template #trigger>
@@ -88,7 +88,7 @@ const toggleRepost = (post) => {
                         </button>
                     </template>
                     <template #content>
-                        <button class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 transition duration-150 ease-in-out" @click="editing = true">
+                        <button class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 dark:text-gray-300 hover:bg-gray-100 focus:bg-gray-100 transition duration-150 ease-in-out dark:hover:bg-gray-700 dark:focus:bg-gray-700" @click="editing = true">
                             Edit
                         </button>
                         <DropdownLink as="button" :href="route('posts.destroy', post.id)" method="delete">
@@ -103,7 +103,7 @@ const toggleRepost = (post) => {
                     <textarea
                         v-model="form.message"
                         :maxlength="maxLength"
-                        class="mt-4 w-full p-2 text-gray-900 border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs"
+                        class="mt-4 w-full p-2 text-gray-900 border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md shadow-xs"
                     ></textarea>
 
                     <InputError :message="form.errors.message" class="mt-2" />
@@ -114,11 +114,11 @@ const toggleRepost = (post) => {
 
                     <div class="space-x-2">
                         <PrimaryButton class="mt-4">Save</PrimaryButton>
-                        <button class="mt-4" @click="editing = false; form.reset(); form.clearErrors()">Cancel</button>
+                        <button class="mt-4 dark:text-gray-400" @click="editing = false; form.reset(); form.clearErrors()">Cancel</button>
                     </div>
                 </form>
 
-                <p v-else class="mt-4 text-lg text-gray-900 wrap-anywhere">{{ post.message }}</p>
+                <p v-else class="mt-4 text-lg text-gray-900 dark:text-gray-300 wrap-anywhere">{{ post.message }}</p>
 
                 <img
                     v-if="post.image"

@@ -38,7 +38,7 @@ const post = () => {
                         v-model="form.message"
                         :maxlength="maxLength"
                         placeholder="What's on your mind?"
-                        class="w-full h-54 p-2 resize-none border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs"
+                        class="w-full h-54 p-2 resize-none border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
                     ></textarea>
 
                     <div class="flex justify-end text-sm text-gray-400">
