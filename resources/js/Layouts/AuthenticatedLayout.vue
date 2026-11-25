@@ -5,9 +5,14 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
+import Modal from '@/Components/Modal.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+import InputError from '@/Components/InputError.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
+const showingPostModal = ref(false);
 
 const form = useForm({
     q: '',
@@ -15,6 +20,35 @@ const form = useForm({
 
 const topUsers = usePage().props.topUsers;
 const trendingTopics = computed(() => usePage().props.trendingTopics ?? []);
+
+const showPostModal = () => {
+    showingPostModal.value = true;
+};
+
+const closeModal = () => {
+    showingPostModal.value = false;
+
+    form.clearErrors();
+    form.reset();
+};
+
+const maxLength = 500;
+
+const postForm = useForm({
+    message: '',
+    image: null,
+});
+
+const post = () => {
+    postForm.post(route('posts.store'), {
+        preserveScroll: true,
+        reset: ['posts'],
+        onSuccess: () => {
+            postForm.reset();
+            showingPostModal.value = false;
+        },
+    });
+}
 </script>
 
 <template>
@@ -118,6 +152,16 @@ const trendingTopics = computed(() => usePage().props.trendingTopics ?? []);
                     >
                         Profile
                     </ResponsiveNavLink>
+
+                    <!-- Post Modal Button -->
+                    <div class="flex shrink-0 items-center mt-4 mb-4 mx-2 my-4">
+                        <div
+                            @click="showPostModal"
+                            class="bg-red-600 text-white w-full rounded-md text-center font-bold p-2 hover:cursor-pointer hover:bg-red-500"
+                        >
+                            Post
+                        </div>
+                    </div>
                 </div>
 
                 <div class="py-2">
@@ -221,6 +265,16 @@ const trendingTopics = computed(() => usePage().props.trendingTopics ?? []);
                                 >
                                     Profile
                                 </NavLink>
+
+                                <!-- Post Modal Button -->
+                                <div class="flex shrink-0 items-center mt-4 mb-4 mx-2 my-4">
+                                    <div
+                                        @click="showPostModal"
+                                        class="bg-red-600 text-white w-full rounded-md text-center font-bold p-4 hover:cursor-pointer hover:bg-red-500"
+                                    >
+                                        Post
+                                    </div>
+                                </div>
 
                                 <!-- Settings Dropdown -->
                                 <div class="relative ms-3">
@@ -339,14 +393,57 @@ const trendingTopics = computed(() => usePage().props.trendingTopics ?? []);
                         </div>
 
                         <!-- Footer -->
-                        <div class="mx-auto mt-3 p-4 rounded-lg bg-white dark:bg-gray-800">
+                        <div class="mx-auto mt-4 p-4">
                             <div>
-                                <p class="text-gray-500 dark:text-gray-300 text-sm">&copy; {{ $page.props.appName + ' ' + new Date().getFullYear() }}</p>
+                                <p class="text-gray-500 dark:text-gray-300 text-xs">&copy; {{ $page.props.appName + ' ' + new Date().getFullYear() }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </main>
+
+            <!-- Post Modal -->
+            <Modal :show="showingPostModal" @close="closeModal">
+                <div class="relative z-50 p-6">
+                    <form @submit.prevent="post" class="w-full">
+                        <div>
+                            <textarea
+                                v-model="postForm.message"
+                                :maxlength="maxLength"
+                                placeholder="What's on your mind?"
+                                class="w-full h-54 p-2 resize-none border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200/50 rounded-md shadow-xs dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
+                            ></textarea>
+
+                            <div class="flex justify-end text-sm text-gray-400">
+                                <span :class="{ 'text-red-600' : postForm.message.length >= maxLength }">{{ postForm.message.length }} / {{ maxLength }}</span>
+                            </div>
+
+                            <InputError :message="postForm.errors.message" class="mt-2" />
+                        </div>
+
+                        <div class="flex justify-between items-center mt-4">
+                            <div>
+                                <label for="image" class="cursor-pointer">
+                                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                                    </svg>
+
+                                    <input name="image" id="image" type="file" class="hidden" @input="postForm.image = $event.target.files[0]" />
+
+                                    <InputError :message="postForm.errors.image" class="mt-2" />
+                                </label>
+                            </div>
+                            <div class="space-x-2">
+                                <SecondaryButton @click="closeModal">
+                                    Cancel
+                                </SecondaryButton>
+
+                                <PrimaryButton class="px-4 py-2">Post</PrimaryButton>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </Modal>
         </div>
     </div>
 </template>

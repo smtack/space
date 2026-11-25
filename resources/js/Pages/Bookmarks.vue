@@ -12,7 +12,7 @@ const props = defineProps({
     <Head title="Bookmarks" />
 
     <AuthenticatedLayout>
-        <div class="divide-y">
+        <div>
             <InfiniteScroll data="posts">
                 <Post
                     v-for="post in posts.data"

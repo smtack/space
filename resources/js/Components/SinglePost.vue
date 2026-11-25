@@ -9,6 +9,7 @@ import { Link, useForm, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
 
 const props = defineProps(['post']);
 
@@ -114,7 +115,7 @@ const toggleRepost = (post) => {
 
                     <div class="space-x-2">
                         <PrimaryButton class="mt-4">Save</PrimaryButton>
-                        <button class="mt-4 dark:text-gray-400" @click="editing = false; form.reset(); form.clearErrors()">Cancel</button>
+                        <SecondaryButton class="mt-4 dark:text-gray-400" @click="editing = false; form.reset(); form.clearErrors()">Cancel</SecondaryButton>
                     </div>
                 </form>
 

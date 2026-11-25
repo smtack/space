@@ -4,6 +4,7 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue'
 import LikeIcon from '@/Components/Icons/LikeIcon.vue';
 import ReplyIcon from '@/Components/Icons/ReplyIcon.vue';
 import RepostIcon from './Icons/RepostIcon.vue';
@@ -110,7 +111,7 @@ const toggleRepost = (post) => {
 </script>
 
 <template>
-    <div @click="redirect" class="p-6 flex space-x-2 border-t border-gray-200 dark:border-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 hover:cursor-pointer">
+    <div @click="redirect" class="p-6 flex space-x-2 border-b border-gray-200 dark:border-gray-900 hover:bg-gray-200 dark:hover:bg-gray-700 hover:cursor-pointer">
         <Link v-on:click.stop :href="route('profile.index', post.user.username)">
             <img
                 class="h-12 w-12 rounded-full"
@@ -165,7 +166,7 @@ const toggleRepost = (post) => {
 
                 <div class="space-x-2">
                     <PrimaryButton class="mt-4">Save</PrimaryButton>
-                    <button class="mt-4 dark:text-gray-400" @click="cancel">Cancel</button>
+                    <SecondaryButton class="mt-4 dark:text-gray-400" @click="cancel">Cancel</SecondaryButton>
                 </div>
             </form>
 

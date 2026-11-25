@@ -5,7 +5,7 @@ import UpdateBioForm from './Partials/UpdateBioForm.vue';
 import DeleteUserForm from './Partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
-import UpdateAppearanceForm from './Partials/UpdateAppearanceForm.vue/index.js';
+import UpdateAppearanceForm from './Partials/UpdateAppearanceForm.vue';
 import { Head } from '@inertiajs/vue3';
 
 defineProps({
@@ -19,7 +19,7 @@ defineProps({
 </script>
 
 <template>
-    <Head title="Edit Profile" />
+    <Head title="Settings" />
 
     <AuthenticatedLayout>
         <div>

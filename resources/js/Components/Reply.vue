@@ -3,6 +3,7 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { Link, useForm, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import dayjs from 'dayjs';
@@ -66,7 +67,7 @@ const destroy = (id) => {
 </script>
 
 <template>
-    <div class="p-6 flex space-x-2">
+    <div class="p-6 flex space-x-2 border-b border-gray-300 dark:border-gray-900">
         <Link :href="route('profile.index', post.user.username)">
             <img
                 class="h-12 w-12 rounded-full"
@@ -116,7 +117,7 @@ const destroy = (id) => {
 
                 <div class="space-x-2">
                     <PrimaryButton class="mt-4">Save</PrimaryButton>
-                    <button class="mt-4 dark:text-gray-400" @click="cancel">Cancel</button>
+                    <SecondaryButton class="mt-4 dark:text-gray-400" @click="cancel">Cancel</SecondaryButton>
                 </div>
             </form>
             

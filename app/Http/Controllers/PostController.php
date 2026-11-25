@@ -51,7 +51,7 @@ class PostController extends Controller
             'image' => $filename,
         ]);
 
-        return redirect(route('home'));
+        return redirect()->back();
     }
 
     /**

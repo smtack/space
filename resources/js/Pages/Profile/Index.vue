@@ -27,7 +27,7 @@ const unfollow = () => {
     <Head :title="`${profile.name}'s Profile`" />
 
     <AuthenticatedLayout>
-        <div class="flex flex-col sm:flex-row gap-6 sm:gap-8 p-6 items-start">
+        <div class="flex flex-col sm:flex-row gap-6 sm:gap-8 p-6 items-start border-b border-gray-200">
             <div class="shrink-0">
                 <img
                     class="h-12 w-12 text-gray-600 rounded-full"
